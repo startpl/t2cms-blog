@@ -6,10 +6,10 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use startpl\t2cmsblog\useCases\PageService;
 use startpl\t2cmsblog\models\Page;
 use yii\helpers\ArrayHelper;
-use yii\data\ArrayDataProvider;
 use startpl\t2cmsblog\repositories\{
     PageRepository,
     CategoryRepository
@@ -33,6 +33,15 @@ class PagesController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

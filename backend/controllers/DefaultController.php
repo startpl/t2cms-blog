@@ -7,6 +7,7 @@ use startpl\t2cmsblog\models\Category;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use startpl\t2cmsblog\repositories\{
     PageRepository,
@@ -19,7 +20,7 @@ use \t2cms\sitemanager\components\Languages;
 /**
  * CategoryController implements the CRUD actions for Category model.
  */
-class CategoriesController extends Controller
+class DefaultController extends Controller
 {
     private $categoryService;
     private $categoryRepository;
@@ -29,6 +30,15 @@ class CategoriesController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

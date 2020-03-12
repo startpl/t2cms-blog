@@ -37,6 +37,7 @@ class AssetBundle extends \yii\web\AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
-        'yii\jui\JuiAsset'
+        'yii\jui\JuiAsset',
+        't2cms\AssetBundle'
     ];
 }

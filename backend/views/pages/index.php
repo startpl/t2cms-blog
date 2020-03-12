@@ -36,8 +36,6 @@ $this->registerJsVar('i18n', [
 <div class="page-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <?php Pjax::begin(); ?>
     
     <div class="section-justify">
         <div>
@@ -64,6 +62,8 @@ $this->registerJsVar('i18n', [
             </div>
         </div>
     </div>
+    
+    <?php Pjax::begin(); ?>
     
     <div class="row">
         
@@ -97,7 +97,18 @@ $this->registerJsVar('i18n', [
                             return Html::a($model->pageContent->name, Url::to(['update', 'id' => $model->id]));
                         }
                     ],
-                    'url:url',
+                    [
+                        'label' => 'url',
+                        'attribute' => 'url',
+                        'format' => 'html',
+                        'value' => function($model, $key, $index){
+                            $anchor = [
+                                $model->url,
+                                rmrevin\yii\fontawesome\FontAwesome::i('external-link')
+                            ];
+                            return Html::a(implode(' ', $anchor), \Yii::$app->urlManagerFrontend->createAbsoluteUrl(['blog/page', 'id' => $model->id]));
+                        }
+                    ],
                     [
                         'label' => 'Category',
                         'filter' => \yii\helpers\ArrayHelper::merge(

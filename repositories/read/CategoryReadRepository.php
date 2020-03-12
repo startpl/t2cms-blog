@@ -65,6 +65,11 @@ class CategoryReadRepository {
             ->all();
     }
     
+    public static function getAllAsTree($domain_id = null, $language_id = null): ?array
+    {
+        return Category::getTree(null, $domain_id, $language_id);
+    }
+    
     private static function asTree(array $models): ?array
     {
         $tree = [];

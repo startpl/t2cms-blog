@@ -28,8 +28,6 @@ $this->registerJsVar('i18n', [
 <div class="category-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <?php Pjax::begin(); ?>
     
     <div class="section-justify">
         <div>
@@ -56,6 +54,8 @@ $this->registerJsVar('i18n', [
             </div>
         </div>
     </div>
+    
+    <?php Pjax::begin(); ?>
         
     <?=    \t2cms\treeview\TreeView::widget([
         'dataProvider' => $dataProvider,
@@ -82,7 +82,11 @@ $this->registerJsVar('i18n', [
                 'attribute' => 'url',
                 'format' => 'html',
                 'value' => function($model, $key, $index){
-                    return Html::a($model->url, yii\helpers\Url::to(['update', 'id' => $model->id]));
+                    $anchor = [
+                        $model->url,
+                        rmrevin\yii\fontawesome\FontAwesome::i('external-link')
+                    ];
+                    return Html::a(implode(' ', $anchor), \Yii::$app->urlManagerFrontend->createAbsoluteUrl(['blog/category', 'id' => $model->id]));
                 }
             ],
             [

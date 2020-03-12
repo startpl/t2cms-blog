@@ -63,6 +63,11 @@ class CategoryHelper implements BlogHelper{
         return CategoryReadRepository::getAll($domain_id, $language_id);
     }
     
+    public static function getAllAsTree($domain_id = null, $language_id = null): ?array
+    {
+        return CategoryReadRepository::getAllAsTree($domain_id, $language_id);
+    }
+    
     
     private static function getCurrentDomain($domain_id = null){
         return $domain_id !== null? : \Yii::$app->request->cookies->getValue('domain');

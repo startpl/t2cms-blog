@@ -47,6 +47,7 @@ class PageReadRepository {
                 $query->andWhere(['IN','page_content.id', $in]);
             }])
             ->andFilterWhere(['NOT IN', 'page.id', $exclude])
+            ->asArray()
             ->all();
     }
 }

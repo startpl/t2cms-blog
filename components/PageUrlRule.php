@@ -20,7 +20,7 @@ class PageUrlRule extends BaseObject implements UrlRuleInterface
     
     public function createUrl($manager, $route, $params)
     {
-        if ($route === 'blog/category') {
+        if ($route === 'blog/page') {
             return $this->page->createUrl($params);
         }
         
