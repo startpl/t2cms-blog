@@ -11,7 +11,7 @@ namespace startpl\t2cmsblog\services\nestedSets;
 use startpl\t2cmsblog\models\Category;
 use t2cms\sitemanager\components\{
     Domains,
-    Languages,
+    Languages
 };
 
 /**

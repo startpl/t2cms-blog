@@ -7,7 +7,7 @@ use startpl\t2cmsblog\models\{
     Category,
     PageSearch,
     PageContentQuery,
-    PageContent,
+    PageContent
 };
 
 /**
