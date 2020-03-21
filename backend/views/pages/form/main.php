@@ -1,7 +1,10 @@
 <?php
 
 use startpl\t2cmsblog\models\Page;
-
+use t2cms\sitemanager\components\{
+    Domains,
+    Languages
+};
 
 /**
  * @var $this yii\web\View
@@ -37,7 +40,7 @@ use startpl\t2cmsblog\models\Page;
 </div>
 
 <?= $form->field($model, 'category_id')->dropDownList(
-    startpl\t2cmsblog\models\Category::getTree(), 
+    startpl\t2cmsblog\models\Category::getTree(null, Domains::getEditorDomainId(), Languages::getEditorLangaugeId()), 
     ['prompt' => Yii::t('nsblog','No Category'), 'class' => 'form-control']
 );?>
 

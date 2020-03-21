@@ -70,10 +70,10 @@ class CategoryHelper implements BlogHelper{
     
     
     private static function getCurrentDomain($domain_id = null){
-        return $domain_id !== null? : \Yii::$app->request->cookies->getValue('domain');
+        return $domain_id !== null? $domain_id : \Yii::$app->request->cookies->getValue('domain');
     }
     
     private static function getCurrentLanguage($language_id = null){
-        return $language_id !== null? : \Yii::$app->request->cookies->getValue('language');
+        return $language_id !== null? $language_id : \Yii::$app->request->cookies->getValue('language');
     }
 }

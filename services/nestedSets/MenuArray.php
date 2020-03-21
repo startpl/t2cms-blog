@@ -9,6 +9,7 @@
 namespace startpl\t2cmsblog\services\nestedSets;
 
 use startpl\t2cmsblog\models\Category;
+use startpl\t2cmsblog\helpers\CategoryHelper;
 use t2cms\sitemanager\components\{
     Domains,
     Languages
@@ -23,8 +24,7 @@ use t2cms\sitemanager\components\{
 class MenuArray {
     static function getData()
     {
-
-        $collection = \startpl\t2cmsblog\helpers\CategoryHelper::getAll(Domains::getEditorDomainId(), Languages::getEditorLangaugeId());
+        $collection = CategoryHelper::getAll(Domains::getEditorDomainId(), Languages::getEditorLangaugeId());
         
         $menu = [];
 

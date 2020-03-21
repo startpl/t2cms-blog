@@ -71,9 +71,12 @@ class PageForm extends Model
     public function checkUrl($attribute, $params)
     {       
         if(
-            Category::find()->where(['url' => $this->url, 'parent_id' => $this->category_id])->andWhere(['!=', 'id', $this->id])->exists() || 
-            Page::find()->where(['category_id' => $this->category_id, 'url' => $this->url])->exists()
-        ){
+            Category::find()->where(['url' => $this->url, 'parent_id' => $this->category_id])->exists() || 
+            Page::find()
+                ->where(['category_id' => $this->category_id, 'url' => $this->url])
+                ->andWhere(['!=', 'id', $this->id])
+                ->exists()
+        ){            
             $this->addError($attribute, \Yii::t('nsblog/error', 'This Url already exists'));
         }
     }
