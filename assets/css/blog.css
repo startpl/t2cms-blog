@@ -60,52 +60,6 @@
 #blog-grid .category.danger{
     background-color: #f2dede;
 }
-
-/* switch status active start */
-.switch_checkbox input[type=checkbox]{
-	height: 0;
-	width: 0;
-	visibility: hidden;
-	position: absolute;
-}
-
-.switch_checkbox label {
-	cursor: pointer;
-	text-indent: -9999px;
-	width: 50px;
-	height: 25px;
-	background: grey;
-	display: block;
-	border-radius: 100px;
-	position: relative;
-}
-
-.switch_checkbox label:after {
-	content: '';
-	position: absolute;
-	top: 5px;
-	left: 5px;
-	width: 16px;
-	height: 16px;
-	background: #fff;
-	border-radius: 90px;
-	transition: 0.3s;
-}
-
-.switch_checkbox input:checked + label {
-	background: #bada55;
-}
-
-.switch_checkbox input:checked + label:after {
-	left: calc(100% - 5px);
-	transform: translateX(-100%);
-}
-
-.switch_checkbox label:active:after {
-	width: 25px;
-}
-/* switch status active end */
-
 .section-right{
 	display: flex;
 	justify-content: flex-end;

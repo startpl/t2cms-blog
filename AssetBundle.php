@@ -38,6 +38,6 @@ class AssetBundle extends \yii\web\AssetBundle
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
         'yii\jui\JuiAsset',
-        't2cms\AssetBundle'
+        't2cms\T2Asset'
     ];
 }
