@@ -36,8 +36,9 @@ use Yii;
  * @property Domain $domain
  * @property Language $lang
  * 
- * @property string main_template JSON
- * @property string page_template JSON
+ * @property string $main_template JSON
+ * @property string $page_template JSON
+ * @property string $settings JSON
  */
 class Page extends \yii\db\ActiveRecord
 {
@@ -68,6 +69,7 @@ class Page extends \yii\db\ActiveRecord
             [['url', 'publish_at', 'access_read'], 'required'],
             [['author_id', 'position', 'category_id', 'access_read', 'status'], 'integer'],
             [['url', 'main_template', 'page_template'], 'string', 'max' => 255],
+            [['settings'], 'string'],
             [['publish_at'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['publish_at'], 'default', 'value' => date('Y-m-d H:i:s')],
             [['position'], 'default', 'value' => 0],

@@ -34,10 +34,11 @@ use yii\db\Expression;
  * @property RelatedCategory[] $relatedCategories
  * 
  * @property int $records_per_page
- * @property string sort
- * @property string main_template JSON
- * @property string category_template JSON
- * @property string page_template JSON
+ * @property string $sort
+ * @property string $main_template JSON
+ * @property string $category_template JSON
+ * @property string $page_template JSON
+ * @property string $settings JSON
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -108,6 +109,7 @@ class Category extends \yii\db\ActiveRecord
             [['url'], 'match', 'pattern' => '/^[\w-]+$/', 
                 'message' => 'The field can contain only latin letters, numbers, and signs "_", "-"'],
             [['author_id'], 'default', 'value' => \Yii::$app->user->id],
+            [['settings'], 'string'],
             [['addCategories', 'addPages', 'rltPages', 'rltCategories'], 'safe'],
         ];
     }
