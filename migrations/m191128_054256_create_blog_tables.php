@@ -31,13 +31,11 @@ class m191128_054256_create_blog_tables extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%related_page}}');
-        $this->dropTable('{{%related_category}}');
-        $this->dropTable('{{%additional_page}}');
-        $this->dropTable('{{%additional_category}}');
+        $this->dropTable('{{%page_assign}}');
+        $this->dropTable('{{%category_assign}}');
         
-        $this->dropTable('{{%meta_blog_category}}');
-        $this->dropTable('{{%meta_blog_page}}');
+        $this->dropTable('{{%page_content}}');
+        $this->dropTable('{{%category_content}}');
         $this->dropTable('{{%page}}');
         $this->dropTable('{{%category}}');
         return true;
