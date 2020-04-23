@@ -12,7 +12,7 @@ use t2cms\sitemanager\models\{
  * This is the model class for table "{{%category_content}}".
  *
  * @property int $id
- * @property int $category_id
+ * @property int $src_id
  * @property int $domain_id
  * @property int $language_id
  * @property string $name
@@ -32,6 +32,7 @@ use t2cms\sitemanager\models\{
  */
 class CategoryContent extends \yii\db\ActiveRecord
 {
+    use \t2cms\base\traits\ContentValueTrait;
     /**
      * {@inheritdoc}
      */
@@ -46,11 +47,11 @@ class CategoryContent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'name', 'h1', 'image', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
-            [['category_id', 'domain_id', 'language_id'], 'integer'],
+            [['src_id', 'name', 'h1', 'image', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
+            [['src_id', 'domain_id', 'language_id'], 'integer'],
             [['preview_text', 'full_text', 'description', 'og_description'], 'string'],
             [['name', 'h1', 'image', 'title', 'og_title', 'keywords'], 'string', 'max' => 255],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['src_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['src_id' => 'id']],
             [['domain_id'], 'exist', 'skipOnError' => true, 'targetClass' => Domain::className(), 'targetAttribute' => ['domain_id' => 'id']],
             [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => Language::className(), 'targetAttribute' => ['language_id' => 'id']],
         ];
@@ -63,7 +64,7 @@ class CategoryContent extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'category_id' => Yii::t('app', 'Category ID'),
+            'src_id' => Yii::t('app', 'Category ID'),
             'domain_id' => Yii::t('app', 'Domain ID'),
             'language_id' => Yii::t('app', 'Language ID'),
             'name' => Yii::t('app', 'Name'),
@@ -84,7 +85,7 @@ class CategoryContent extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+        return $this->hasOne(Category::className(), ['id' => 'src_id']);
     }
 
     /**
@@ -101,14 +102,5 @@ class CategoryContent extends \yii\db\ActiveRecord
     public function getLanguage()
     {
         return $this->hasOne(Language::className(), ['id' => 'language_id']);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return CategoryContentQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new CategoryContentQuery(get_called_class());
     }
 }

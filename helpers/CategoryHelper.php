@@ -21,7 +21,8 @@ use startpl\t2cmsblog\models\Category;
  * @author Koperdog <koperdog.dev@gmail.com>
  * @version 1.0
  */
-class CategoryHelper implements BlogHelper{
+class CategoryHelper implements BlogHelper
+{
     
     public static function get(int $id, $domain_id = null, $language_id = null): ?array
     {

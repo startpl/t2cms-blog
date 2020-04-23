@@ -13,7 +13,7 @@ use startpl\t2cmsblog\models\{
 class PageContentForm extends Model
 {        
     public $name;
-    public $page_id;
+    public $src_id;
     public $h1;
     public $image;
     public $preview_text;
@@ -35,10 +35,10 @@ class PageContentForm extends Model
     {
         return [
             [['name', 'h1', 'image', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
-            [['page_id'], 'integer'],
+            [['src_id'], 'integer'],
             [['preview_text', 'full_text', 'description', 'og_description'], 'string'],
             [['name', 'h1', 'image', 'title', 'og_title', 'keywords'], 'string', 'max' => 255],
-            [['page_id'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['page_id' => 'id']],            
+            [['src_id'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['src_id' => 'id']],            
         ];
     }
         

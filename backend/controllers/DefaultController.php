@@ -103,6 +103,12 @@ class DefaultController extends Controller
     {
         $domain_id   = Domains::getEditorDomainId();
         $language_id = Languages::getEditorLangaugeId();
+//        
+        $model = Category::find()->withAllContent(2,1, [1])->all();
+//        
+        debug($model);
+        
+//        debug($this->findModel($id, $domain_id, $language_id));
         
         return $this->render('view', [
             'model' => $this->findModel($id, $domain_id, $language_id),
@@ -138,8 +144,6 @@ class DefaultController extends Controller
             }
         }
         else if(Yii::$app->request->post() && (!$form->validate() || !$form->categoryContent->validate())){
-            debug($form->errors);
-            debug($form->categoryContent);
             \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Fill in required fields'));
             exit;
         }

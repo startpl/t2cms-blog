@@ -12,7 +12,7 @@ use t2cms\sitemanager\models\{
  * This is the model class for table "{{%page_content}}".
  *
  * @property int $id
- * @property int $page_id
+ * @property int $src_id
  * @property int|null $domain_id
  * @property int|null $language_id
  * @property string $name
@@ -32,6 +32,8 @@ use t2cms\sitemanager\models\{
  */
 class PageContent extends \yii\db\ActiveRecord
 {
+    use \t2cms\base\traits\ContentValueTrait;
+    
     /**
      * {@inheritdoc}
      */
@@ -46,11 +48,11 @@ class PageContent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['page_id', 'name', 'h1', 'image', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
-            [['page_id', 'domain_id', 'language_id'], 'integer'],
+            [['src_id', 'name', 'h1', 'image', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
+            [['src_id', 'domain_id', 'language_id'], 'integer'],
             [['preview_text', 'full_text', 'description', 'og_description'], 'string'],
             [['name', 'h1', 'image', 'title', 'og_title', 'keywords'], 'string', 'max' => 255],
-            [['page_id'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['page_id' => 'id']],
+            [['src_id'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['src_id' => 'id']],
             [['domain_id'], 'exist', 'skipOnError' => true, 'targetClass' => Domain::className(), 'targetAttribute' => ['domain_id' => 'id']],
             [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => Language::className(), 'targetAttribute' => ['language_id' => 'id']],
         ];
@@ -63,7 +65,7 @@ class PageContent extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'page_id' => Yii::t('app', 'Page ID'),
+            'src_id' => Yii::t('app', 'Page ID'),
             'domain_id' => Yii::t('app', 'Domain ID'),
             'language_id' => Yii::t('app', 'Language ID'),
             'name' => Yii::t('app', 'Name'),
@@ -86,7 +88,7 @@ class PageContent extends \yii\db\ActiveRecord
      */
     public function getPage()
     {
-        return $this->hasOne(Page::className(), ['id' => 'page_id']);
+        return $this->hasOne(Page::className(), ['id' => 'src_id']);
     }
 
     /**
@@ -107,14 +109,5 @@ class PageContent extends \yii\db\ActiveRecord
     public function getLanguage()
     {
         return $this->hasOne(Language::className(), ['id' => 'language_id']);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return PageContentQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new PageContentQuery(get_called_class());
     }
 }

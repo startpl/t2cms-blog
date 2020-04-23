@@ -68,7 +68,7 @@ class m191128_054256_create_blog_tables extends Migration
         
         $this->createTable('{{%category_content}}', [
             'id'             => $this->primaryKey(),
-            'category_id'    => $this->integer()->notNull(),
+            'src_id'    => $this->integer()->notNull(),
             'domain_id'      => $this->integer(),
             'language_id'    => $this->integer(),
             'name'           => $this->string(255)->notNull(),
@@ -83,7 +83,7 @@ class m191128_054256_create_blog_tables extends Migration
             'og_description' => $this->text()->notNull(),
         ]);
         
-        $this->addForeignKey('fk-content_category-category_id', '{{%category_content}}', 'category_id', '{{%category}}', 'id', 'CASCADE');
+        $this->addForeignKey('fk-content_category-src_id', '{{%category_content}}', 'src_id', '{{%category}}', 'id', 'CASCADE');
         $this->addForeignKey('fk-content_category-domain_id', '{{%category_content}}', 'domain_id', '{{%domain}}', 'id', 'CASCADE');
         $this->addForeignKey('fk-content_category-language_id', '{{%category_content}}', 'language_id', '{{%language}}', 'id', 'CASCADE');
         
@@ -111,7 +111,7 @@ class m191128_054256_create_blog_tables extends Migration
         
         $this->createTable('{{%page_content}}', [
             'id'             => $this->primaryKey(),
-            'page_id'        => $this->integer()->notNull(),
+            'src_id'        => $this->integer()->notNull(),
             'domain_id'      => $this->integer(),
             'language_id'    => $this->integer(),
             'name'           => $this->string(255)->notNull(),
@@ -126,7 +126,7 @@ class m191128_054256_create_blog_tables extends Migration
             'og_description' => $this->text()->notNull(),
         ]);
         
-        $this->addForeignKey('fk-page_content-page_id', '{{%page_content}}', 'page_id', '{{%page}}', 'id', 'CASCADE');
+        $this->addForeignKey('fk-page_content-src_id', '{{%page_content}}', 'src_id', '{{%page}}', 'id', 'CASCADE');
         $this->addForeignKey('fk-page_content-domain_id', '{{%page_content}}', 'domain_id', '{{%domain}}', 'id', 'CASCADE');
         $this->addForeignKey('fk-page_content-language_id', '{{%page_content}}', 'language_id', '{{%language}}', 'id', 'CASCADE');
     }

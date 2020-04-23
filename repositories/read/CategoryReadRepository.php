@@ -18,15 +18,7 @@ class CategoryReadRepository {
     
     public function get(int $id, $domain_id = null, $language_id = null): ?array
     {   
-        $model = Category::find()
-            ->with(['categoryContent' => function($query) use ($id, $domain_id, $language_id){
-                $query->andWhere(['id' => CategoryContentQuery::getId($id, $domain_id, $language_id)->one()]);
-            }])
-            ->andWhere(['category.id' => $id])
-            ->asArray()
-            ->one();
-        
-        return $model;
+        return Category::find()->withContent($id, $domain_id, $language_id)->asArray()->one();
     }
     
     public static function getSubcategories(int $id, int $level = 1, $domain_id = null, $language_id = null): ?array
@@ -36,7 +28,7 @@ class CategoryReadRepository {
         if($category){        
             return $category->children($level)
                 ->joinWith(['categoryContent' => function($query) use ($domain_id, $language_id){
-                    $in = ArrayHelper::getColumn(CategoryContentQuery::getAllId($domain_id, $language_id)->asArray()->all(), 'id');
+                    $in = \startpl\t2cmsblog\models\CategoryContent::getAllSuitableIds($domain_id, $language_id);
                     $query->andWhere(['IN','category_content.id', $in]);
                 }])
                 ->orderBy('lft')
@@ -54,15 +46,8 @@ class CategoryReadRepository {
     
     public static function getAll($domain_id = null, $language_id = null, $exclude = null): ?array
     {
-        return Category::find()
-            ->joinWith(['categoryContent' => function($query) use ($domain_id, $language_id){
-                $in = \yii\helpers\ArrayHelper::getColumn(CategoryContentQuery::getAllId($domain_id, $language_id)->asArray()->all(), 'id');
-                $query->andWhere(['IN','category_content.id', $in]);
-            }])
-            ->andWhere(['NOT IN', 'category.id', 1])
-            ->andFilterWhere(['NOT IN', 'category.id', $exclude])
-            ->asArray()
-            ->all();
+        array_push($exclude, Category::ROOT_ID);
+        return Category::find()->getAllWithContent($domain_id, $language_id, $exclude)->asArray()->all();
     }
     
     public static function getAllAsTree($domain_id = null, $language_id = null): ?array

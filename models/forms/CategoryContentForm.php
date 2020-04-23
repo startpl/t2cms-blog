@@ -13,7 +13,7 @@ use startpl\t2cmsblog\models\{
 class CategoryContentForm extends Model
 {        
     public $name;
-    public $category_id;
+    public $src_id;
     public $h1;
     public $image;
     public $preview_text;
@@ -35,10 +35,10 @@ class CategoryContentForm extends Model
     {
         return [
             [['name', 'h1', 'image', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
-            [['category_id', 'language_id'], 'integer'],
+            [['src_id', 'language_id'], 'integer'],
             [['preview_text', 'full_text', 'description', 'og_description'], 'string'],
             [['name', 'h1', 'image', 'title', 'og_title', 'keywords'], 'string', 'max' => 255],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['src_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['src_id' => 'id']],
             
             
         ];
@@ -51,7 +51,7 @@ class CategoryContentForm extends Model
     {
         return [
             'id' => \Yii::t('app', 'ID'),
-            'category_id' => \Yii::t('app', 'Category ID'),
+            'src_id' => \Yii::t('app', 'Category ID'),
             'name' => \Yii::t('app', 'Name'),
             'h1' => \Yii::t('app', 'H1'),
             'image' => \Yii::t('app', 'Image'),

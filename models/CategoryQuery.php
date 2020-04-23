@@ -11,11 +11,18 @@ use creocoder\nestedsets\NestedSetsQueryBehavior;
  */
 class CategoryQuery extends \yii\db\ActiveQuery
 {
-    public function behaviors() {
+    public function behaviors() 
+    {
         return [
             NestedSetsQueryBehavior::className(),
+            'content' => [
+                'class' => \t2cms\base\behaviors\ContentBehavior::className(),
+                'relationName' => 'categoryContent',
+                'relationModel' => CategoryContent::className()
+            ]
         ];
     }
+    
     /**
      * {@inheritdoc}
      * @return Category[]|array

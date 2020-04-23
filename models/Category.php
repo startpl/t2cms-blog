@@ -75,7 +75,7 @@ class Category extends \yii\db\ActiveRecord
             ],
             'tree' => [
                 'class' => NestedSetsBehavior::className(),
-            ],
+            ]
         ];
     }
 
@@ -179,7 +179,7 @@ class Category extends \yii\db\ActiveRecord
         
         $rows = Category::find()
             ->joinWith(['categoryContent' => function($query) use ($domain_id, $language_id){
-                $in = \yii\helpers\ArrayHelper::getColumn(CategoryContentQuery::getAllId($domain_id, $language_id)->asArray()->all(), 'id');
+                $in = CategoryContent::getAllSuitableIds($domain_id, $language_id);
                 $query->andWhere(['IN','category_content.id', $in]);
             }])
             ->select(['category.id', 'tree', 'depth', 'lft', 'position', 'category_content.name'])
@@ -395,7 +395,7 @@ class Category extends \yii\db\ActiveRecord
      */
     public function getCategoryContent()
     {
-        return $this->hasOne(CategoryContent::className(), ['category_id' => 'id']);
+        return $this->hasOne(CategoryContent::className(), ['src_id' => 'id']);
     }
 
     /**

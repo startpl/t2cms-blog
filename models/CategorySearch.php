@@ -49,11 +49,11 @@ class CategorySearch extends CategoryContent
         
         $query = Category::find()
             ->joinWith(['categoryContent' => function($query) use ($domain_id, $language_id){
-                $in = \yii\helpers\ArrayHelper::getColumn(CategoryContentQuery::getAllId($domain_id, $language_id)->asArray()->all(), 'id');
+                $in = CategoryContent::getAllSuitableIds($domain_id, $language_id, [Category::ROOT_ID]);
                 $query->andWhere(['IN','category_content.id', $in]);
             }])
             ->andFilterWhere(['like', 'category_content.name', $name])
-            ->andWhere(['!=', 'category.id', 1]);
+            ->andWhere(['!=', 'category.id', Category::ROOT_ID]);
                         
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -73,9 +73,6 @@ class CategorySearch extends CategoryContent
         $query->joinWith('author');
        
         $query->orderBy(['category.tree' => SORT_ASC, 'category.lft' => SORT_ASC]);
-        
-
-//        debug($query->createCommand()->rawSql);
         
         return $dataProvider;
     }

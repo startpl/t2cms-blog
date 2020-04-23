@@ -8,6 +8,7 @@ use startpl\t2cmsblog\models\{
     CategoryContent,
     CategoryContentQuery
 };
+//use startpl\t2cmsblog\dto\Category;
 
 /**
  * Description of CategoryRepository
@@ -26,13 +27,8 @@ class CategoryRepository {
     
     public function get(int $id, $domain_id = null, $language_id = null): Category
     {        
-        $model = Category::find()
-            ->with(['categoryContent' => function($query) use ($id, $domain_id, $language_id){
-                $query->andWhere(['id' => CategoryContentQuery::getId($id, $domain_id, $language_id)->one()]);
-            }])
-            ->andWhere(['category.id' => $id])
-            ->one();
-                   
+        $model = Category::find()->withContent($id, $domain_id, $language_id)->one();
+        
         if(!$model){
             throw new \DomainException("Category with id: {$id} was not found");
         }
@@ -179,16 +175,10 @@ class CategoryRepository {
         return true;
     }
     
-    public function getAll($domain_id = null, $language_id = null, $exclude = null): ?array
+    public function getAll($domain_id = null, $language_id = null, $exclude = []): ?array
     {
-        return Category::find()
-            ->joinWith(['categoryContent' => function($query) use ($domain_id, $language_id){
-                $in = \yii\helpers\ArrayHelper::getColumn(CategoryContentQuery::getAllId($domain_id, $language_id)->asArray()->all(), 'id');
-                $query->andWhere(['IN','category_content.id', $in]);
-            }])
-            ->andWhere(['NOT IN', 'category.id', 1])
-            ->andFilterWhere(['NOT IN', 'category.id', $exclude])
-            ->all();
+        array_push($exclude, Category::ROOT_ID);
+        return Category::find()->withAllContent($domain_id, $language_id, $exclude)->all();
     }
     
     private function copyCategoryContent(\yii\db\ActiveRecord $model, $domain_id, $language_id)

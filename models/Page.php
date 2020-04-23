@@ -81,6 +81,15 @@ class Page extends \yii\db\ActiveRecord
     
     /**
      * {@inheritdoc}
+     * @return PageQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new PageQuery(get_called_class());
+    }
+    
+    /**
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -262,7 +271,7 @@ class Page extends \yii\db\ActiveRecord
      */
     public function getPageContent()
     {
-        return $this->hasOne(PageContent::className(), ['page_id' => 'id']);
+        return $this->hasOne(PageContent::className(), ['src_id' => 'id']);
     }
 
     /**

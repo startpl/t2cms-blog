@@ -16,22 +16,14 @@ class PageReadRepository {
     
     public static function get(int $id, $domain_id = null, $language_id = null): ?array
     {
-        $model = Page::find()
-            ->with(['pageContent' => function($query) use ($id, $domain_id, $language_id){
-                $query->andWhere(['id' => PageContentQuery::getId($id, $domain_id, $language_id)->one()]);
-            }])
-            ->andWhere(['page.id' => $id])
-            ->asArray()
-            ->one();
-        
-        return $model;
+        return Page::find()->withContent($id, $domain_id, $language_id)->asArray()->one();
     }
     
     public static function getAllByCategory(int $category, $domain_id = null, $language_id = null): ?array
     {
         return Page::find()
             ->joinWith(['pageContent' => function($query) use ($domain_id, $language_id){
-                $in = \yii\helpers\ArrayHelper::getColumn(PageContentQuery::getAllId($domain_id, $language_id)->asArray()->all(), 'id');
+                $in = PageContent::getAllSuitableIds($domain_id, $language_id);
                 $query->andWhere(['IN','page_content.id', $in]);
             }])
             ->andWhere(['category_id' => $category])
@@ -39,15 +31,8 @@ class PageReadRepository {
             ->all();
     }
     
-    public static function getAll($domain_id = null, $language_id = null): ?array
-    {
-        return Page::find()
-            ->joinWith(['pageContent' => function($query) use ($domain_id, $language_id){
-                $in = \yii\helpers\ArrayHelper::getColumn(PageContentQuery::getAllId($domain_id, $language_id)->asArray()->all(), 'id');
-                $query->andWhere(['IN','page_content.id', $in]);
-            }])
-            ->andFilterWhere(['NOT IN', 'page.id', $exclude])
-            ->asArray()
-            ->all();
+    public static function getAll($domain_id = null, $language_id = null, $exclude = null): ?array
+    {                   
+        return Page::find()->withAllContent($domain_id, $language_id, $exclude)->asArray()->all();
     }
 }
