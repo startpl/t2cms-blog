@@ -101,7 +101,7 @@ class PageRepository {
     {
         return Page::find()
             ->joinWith(['pageContent' => function($query) use ($domain_id, $language_id){
-                $in = PageContent::getAllSuitableIds($domain_id, $language_id);
+                $in = PageContent::getAllSuitableId($domain_id, $language_id);
                 $query->andWhere(['IN','page_content.id', $in]);
             }])
             ->andWhere(['category_id' => $category])

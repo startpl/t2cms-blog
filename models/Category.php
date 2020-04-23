@@ -179,7 +179,7 @@ class Category extends \yii\db\ActiveRecord
         
         $rows = Category::find()
             ->joinWith(['categoryContent' => function($query) use ($domain_id, $language_id){
-                $in = CategoryContent::getAllSuitableIds($domain_id, $language_id);
+                $in = CategoryContent::getAllSuitableId($domain_id, $language_id);
                 $query->andWhere(['IN','category_content.id', $in]);
             }])
             ->select(['category.id', 'tree', 'depth', 'lft', 'position', 'category_content.name'])

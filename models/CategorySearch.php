@@ -49,7 +49,7 @@ class CategorySearch extends CategoryContent
         
         $query = Category::find()
             ->joinWith(['categoryContent' => function($query) use ($domain_id, $language_id){
-                $in = CategoryContent::getAllSuitableIds($domain_id, $language_id, [Category::ROOT_ID]);
+                $in = CategoryContent::getAllSuitableId($domain_id, $language_id, [Category::ROOT_ID]);
                 $query->andWhere(['IN','category_content.id', $in]);
             }])
             ->andFilterWhere(['like', 'category_content.name', $name])

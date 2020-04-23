@@ -28,7 +28,7 @@ class CategoryReadRepository {
         if($category){        
             return $category->children($level)
                 ->joinWith(['categoryContent' => function($query) use ($domain_id, $language_id){
-                    $in = \startpl\t2cmsblog\models\CategoryContent::getAllSuitableIds($domain_id, $language_id);
+                    $in = \startpl\t2cmsblog\models\CategoryContent::getAllSuitableId($domain_id, $language_id);
                     $query->andWhere(['IN','category_content.id', $in]);
                 }])
                 ->orderBy('lft')
@@ -41,13 +41,13 @@ class CategoryReadRepository {
     
     public static function getSubcategoriesAsTree(int $id, int $level = 1, $domain_id = null, $language_id = null): ?array
     {
-        return self::asTree(self::getSubcategories($id, $level));
+        return self::asTree(self::getSubcategories($id, $level, $domain_id, $language_id));
     }
     
-    public static function getAll($domain_id = null, $language_id = null, $exclude = null): ?array
+    public static function getAll($domain_id = null, $language_id = null, $exclude = []): ?array
     {
         array_push($exclude, Category::ROOT_ID);
-        return Category::find()->getAllWithContent($domain_id, $language_id, $exclude)->asArray()->all();
+        return Category::find()->withAllContent($domain_id, $language_id, $exclude)->asArray()->all();
     }
     
     public static function getAllAsTree($domain_id = null, $language_id = null): ?array
