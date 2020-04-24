@@ -2,11 +2,11 @@
 
 namespace startpl\t2cmsblog\repositories;
 
+use \yii\helpers\ArrayHelper;
 use startpl\t2cmsblog\models\{
     CategorySearch,
     Category,
-    CategoryContent,
-    CategoryContentQuery
+    CategoryContent
 };
 //use startpl\t2cmsblog\dto\Category;
 
@@ -177,7 +177,7 @@ class CategoryRepository {
     
     public function getAll($domain_id = null, $language_id = null, $exclude = []): ?array
     {
-        array_push($exclude, Category::ROOT_ID);
+        array_push(ArrayHelper::toArray($exclude), Category::ROOT_ID);
         return Category::find()->withAllContent($domain_id, $language_id, $exclude)->all();
     }
     

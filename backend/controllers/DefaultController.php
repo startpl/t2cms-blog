@@ -94,30 +94,8 @@ class DefaultController extends Controller
     }
 
     /**
-     * Displays a single Category model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        $domain_id   = Domains::getEditorDomainId();
-        $language_id = Languages::getEditorLangaugeId();
-//        
-        $model = Category::find()->withAllContent(2,1, [1])->all();
-//        
-        debug($model);
-        
-//        debug($this->findModel($id, $domain_id, $language_id));
-        
-        return $this->render('view', [
-            'model' => $this->findModel($id, $domain_id, $language_id),
-        ]);
-    }
-
-    /**
      * Creates a new Category model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * If creation is successful, the browser will be redirected to the 'update' page.
      * @return mixed
      */
     public function actionCreate()
