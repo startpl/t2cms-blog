@@ -46,7 +46,7 @@ class PageSearch extends PageContent
     {
         $query = Page::find()
             ->joinWith(['pageContent' => function($query) use ($domain_id, $language_id){
-                $in = \yii\helpers\ArrayHelper::getColumn(PageContentQuery::getAllId($domain_id, $language_id)->asArray()->all(), 'id');
+                $in = PageContent::getAllSuitableId($id, $domain_id, $language_id);
                 $query->andWhere(['IN','page_content.id', $in]);
             }])
             ->joinWith(['category'])

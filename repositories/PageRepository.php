@@ -6,7 +6,6 @@ use startpl\t2cmsblog\models\{
     Page,
     Category,
     PageSearch,
-    PageContentQuery,
     PageContent
 };
 

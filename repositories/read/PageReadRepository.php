@@ -1,10 +1,7 @@
 <?php
 
 namespace startpl\t2cmsblog\repositories\read;
-use startpl\t2cmsblog\models\{
-    Page,
-    PageContentQuery
-};
+use startpl\t2cmsblog\models\Page;
 
 /**
  * Description of CategoryRepository
