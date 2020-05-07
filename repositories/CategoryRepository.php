@@ -175,7 +175,7 @@ class CategoryRepository {
         return true;
     }
     
-    public function getAll($domain_id = null, $language_id = null, $exclude = []): ?array
+    public static function getAll($domain_id = null, $language_id = null, $exclude = []): ?array
     {
         array_push(ArrayHelper::toArray($exclude), Category::ROOT_ID);
         return Category::find()->withAllContent($domain_id, $language_id, $exclude)->all();
