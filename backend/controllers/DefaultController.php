@@ -24,18 +24,25 @@ class DefaultController extends Controller
 {
     private $categoryService;
     private $categoryRepository;
+    
+    private $domain_id;
+    private $language_id;
+    
     /**
      * {@inheritdoc}
      */
     public function behaviors()
     {
         return [
+            'panelAccess' => [
+                'class' => \t2cms\base\behaviors\AdminPanelAccessControl::className()
+            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['managePost'],
                     ],
                 ],
             ],
@@ -62,8 +69,8 @@ class DefaultController extends Controller
         $this->categoryService    = $categoryService;
         $this->categoryRepository = $categoryRepository;
         
-        $domain_id   = Domains::getEditorDomainId();
-        $language_id = Languages::getEditorLangaugeId();
+        $this->domain_id   = Domains::getEditorDomainId();
+        $this->language_id = Languages::getEditorLangaugeId();
     }
     
     public function actionSort()
@@ -82,10 +89,12 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {   
-        $domain_id   = Domains::getEditorDomainId();
-        $language_id = Languages::getEditorLangaugeId();
                 
-        $dataProvider = $this->categoryRepository->search(\Yii::$app->request->queryParams, $domain_id, $language_id);
+        $dataProvider = $this->categoryRepository->search(
+            \Yii::$app->request->queryParams, 
+            $this->domain_id, 
+            $this->language_id
+        );
         
         return $this->render('index', [
             'searchForm'     => $this->categoryRepository->getSearchModel(),
@@ -102,11 +111,8 @@ class DefaultController extends Controller
     {
         $form = new CategoryForm();
         
-        $domain_id   = Domains::getEditorDomainId();
-        $language_id = Languages::getEditorLangaugeId();
-        
-        $allCategories = $this->findCategories($domain_id, $language_id);
-        $allPages      = $this->findPages($domain_id, $language_id);
+        $allCategories = $this->findCategories($this->domain_id, $this->language_id);
+        $allPages      = $this->findPages($this->domain_id, $this->language_id);
         
         if (
             $form->load(Yii::$app->request->post()) && $form->validate()
@@ -127,9 +133,9 @@ class DefaultController extends Controller
         }
         
         return $this->render('create', [
-                'model' => $form,
+                'model'         => $form,
                 'allCategories' => $allCategories,
-                'allPages' => $allPages,
+                'allPages'      => $allPages,
             ]);
     }
 
@@ -140,22 +146,19 @@ class DefaultController extends Controller
      * @return mixed
      */
     public function actionUpdate($id)
-    {
-        $domain_id   = Domains::getEditorDomainId();
-        $language_id = Languages::getEditorLangaugeId();
-        
-        $model = $this->findModel($id, $domain_id, $language_id);
+    {        
+        $model = $this->findModel($id, $this->domain_id, $this->language_id);
         
         $form  = new CategoryForm();
         $form->loadModel($model);
-        
-        $allCategories = $this->findCategories($domain_id, $language_id, $id);
-        $allPages      = $this->findPages($domain_id, $language_id);
+                
+        $allCategories = $this->findCategories($this->domain_id, $this->language_id, $id);
+        $allPages      = $this->findPages($this->domain_id, $this->language_id);
         
         if(
             $form->load(Yii::$app->request->post()) && $form->validate()
             && $form->categoryContent->load(Yii::$app->request->post()) && $form->categoryContent->validate()){
-            if($this->categoryService->save($model, $form, $domain_id, $language_id)){
+            if($this->categoryService->save($model, $form, $this->domain_id, $this->language_id)){
                 \Yii::$app->session->setFlash('success', \Yii::t('nsblog', 'Success update'));
                 return $this->refresh();
             }
@@ -170,9 +173,9 @@ class DefaultController extends Controller
         
 
         return $this->render('update', [
-            'model' => $form,
+            'model'         => $form,
             'allCategories' => $allCategories,
-            'allPages' => $allPages,
+            'allPages'      => $allPages
         ]);
     }
     

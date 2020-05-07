@@ -33,12 +33,15 @@ class PagesController extends Controller
     public function behaviors()
     {
         return [
+            'panelAccess' => [
+                'class' => \t2cms\base\behaviors\AdminPanelAccessControl::className()
+            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['managePost'],
                     ],
                 ],
             ],
