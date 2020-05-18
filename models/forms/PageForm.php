@@ -52,12 +52,12 @@ class PageForm extends Model
     {
         return [
             [['url', 'status', 'publish_at', 'access_read'], 'required'],
-            [['id', 'author_id', 'status', 'access_read', 'category_id'], 'integer'],
+            [['id', 'author_id', 'status', 'category_id'], 'integer'],
             [['mainTemplateApplySub', 'pageTemplateApplySub'], 'boolean'],
             [['status'], 'default', 'value' => Page::STATUS['DRAFT']],
             [['publish_at'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['publish_at'], 'default', 'value' => date('Y-m-d H:i:s')],
-            [['url', 'main_template', 'page_template'], 'string', 'max' => 255],
+            [['url', 'main_template', 'page_template', 'access_read'], 'string', 'max' => 255],
             [['mainTemplateName', 'pageTemplateName'], 'string', 'max' => 150],
             [['mainTemplateName', 'pageTemplateName'], 'default', 'value' => ''],
             ['url', 'checkUrl'],

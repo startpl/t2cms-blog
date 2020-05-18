@@ -107,23 +107,23 @@ $this->registerJsVar('i18n', [
             ],
             'position',
             [
-                        'label'     => 'status',
-                        'attribute' => 'status',
-                        'options' => ['width'=>'120px'],
-                        'format'    => 'raw',
-                        'filter'    => Category::getStatuses(),
-                        'value' => function($model, $key, $index){
-                            $html  = Html::beginTag('div', ['class' => 'switch_checkbox']);
-                            $html .= Html::checkbox(
-                                        "status[{$model->id}]", 
-                                        $model->status == Category::STATUS['PUBLISHED'], 
-                                        ['id' => 'status_'.$model->id, 'class' => 'change-status']
-                                    );
-                            $html .= Html::label('Switch', 'status_'.$model->id);
-                            $html .= Html::endTag('div');
-                            return $html;
-                        }
-                    ]
+                'label'     => 'status',
+                'attribute' => 'status',
+                'options' => ['width'=>'120px'],
+                'format'    => 'raw',
+                'filter'    => Category::getStatuses(),
+                'value' => function($model, $key, $index){
+                    $html  = Html::beginTag('div', ['class' => 'switch_checkbox']);
+                    $html .= Html::checkbox(
+                                "status[{$model->id}]", 
+                                $model->status == Category::STATUS['PUBLISHED'], 
+                                ['id' => 'status_'.$model->id, 'class' => 'change-status']
+                            );
+                    $html .= Html::label('Switch', 'status_'.$model->id);
+                    $html .= Html::endTag('div');
+                    return $html;
+                }
+            ]
         ]
     ]);?>
     

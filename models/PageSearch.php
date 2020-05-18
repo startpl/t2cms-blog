@@ -51,7 +51,7 @@ class PageSearch extends PageContent
             }])
             ->joinWith(['category'])
             ->with(['category.categoryContent' => function($query) use ($domain_id, $language_id){
-                $in = \yii\helpers\ArrayHelper::getColumn(CategoryContentQuery::getAllId($domain_id, $language_id)->asArray()->all(), 'id');
+                $in = CategoryContent::getAllSuitableId($id, $domain_id, $language_id);
                 $query->andWhere(['IN','category_content.id', $in]);
             }])
             ->andFilterWhere(['like', 'page_content.name', $this->name]);

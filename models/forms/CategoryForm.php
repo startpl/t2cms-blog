@@ -19,6 +19,7 @@ class CategoryForm extends Model
     public $author_id;
     public $parent_id;
     public $publish_at;
+    public $settings;
 
     public $addCategories;
     public $addPages;
@@ -58,13 +59,13 @@ class CategoryForm extends Model
     {
         return [
             [['url', 'status', 'publish_at', 'access_read'], 'required'],
-            [['id','author_id', 'status', 'access_read', 'parent_id', 'records_per_page'], 'integer'],
+            [['id','author_id', 'status', 'parent_id', 'records_per_page'], 'integer'],
             [['mainTemplateApplySub', 'categoryTemplateApplySub', 'pageTemplateApplySub'], 'boolean'],
             [['status'], 'default', 'value' => Category::STATUS['DRAFT']],
             [['records_per_page'], 'default', 'value' => 15],
             [['publish_at'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['publish_at'], 'default', 'value' => date('Y-m-d H:i:s')],
-            [['url', 'sort', 'main_template', 'category_template', 'page_template'], 'string', 'max' => 255],
+            [['url', 'sort', 'main_template', 'category_template', 'page_template', 'access_read'], 'string', 'max' => 255],
             [['mainTemplateName', 'categoryTemplateName', 'pageTemplateName'], 'string', 'max' => 150],
             [['mainTemplateName', 'categoryTemplateName', 'pageTemplateName'], 'default', 'value' => ''],
             ['url', 'checkUrl'],
@@ -72,6 +73,7 @@ class CategoryForm extends Model
                 'message' => 'The field can contain only latin letters, numbers, and signs "_", "-"'],
             [['author_id'], 'default', 'value' => \Yii::$app->user->id],
             [['addCategories', 'addPages', 'rltPages', 'rltCategories', 'main_template', 'category_template', 'page_template'], 'safe'],
+            [['settings'], 'string'],
         ];
     }
     

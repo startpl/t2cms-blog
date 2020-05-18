@@ -61,25 +61,33 @@
     background-color: #f2dede;
 }
 .section-right{
-	display: flex;
-	justify-content: flex-end;
-	text-align: right;
-	margin-bottom:10px;
+    display: flex;
+    justify-content: flex-end;
+    text-align: right;
+    margin-bottom:10px;
 }
 
 #group-controls{
-	display: none;
-	margin-bottom:0;
-	margin-left:10px;
+    display: none;
+    margin-bottom:0;
+    margin-left:10px;
 }
 #group-controls button + button{
-	margin-left:10px;
+    margin-left:10px;
 }
 #group-controls button{
-	display: inline-flex;
-	align-items: center;
-	border-color:transparent;
+    display: inline-flex;
+    align-items: center;
+    border-color:transparent;
 }
 #group-controls button span{
-	margin-right:5px;
+    margin-right: 5px;
+}
+
+/* HERE I STARTED USING BEM :) */
+.form__field .form__field-counter {
+    text-align: right;
+}
+.form__field .help-block {
+    margin: 0;
 }

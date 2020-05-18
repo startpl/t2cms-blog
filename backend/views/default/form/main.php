@@ -4,6 +4,15 @@ use startpl\t2cmsblog\models\Category;
 
 use t2cms\sitemanager\components\Domains;
 use t2cms\sitemanager\components\Languages;
+use t2cms\user\common\repositories\RoleRepository;
+use yii\helpers\ArrayHelper;
+
+$roles = ArrayHelper::map(RoleRepository::getAll(), 'name', 'description');
+
+foreach($roles as &$role) {
+    $role = \Yii::t('t2cms', $role);
+}
+
 /**
  * @var $this yii\web\View
  * @var form yii\widgets\ActiveForm;
@@ -45,7 +54,7 @@ use t2cms\sitemanager\components\Languages;
 <?= $form->field($model->categoryContent, 'h1')->textInput(['maxlength' => true]) ?>
 
 <?= $form->field($model->categoryContent, 'image')->widget(\mihaildev\elfinder\InputFile::className(), [
-    'controller'    => 'blog/elfinder',
+    'controller'    => 'elfinder',
     'filter'        => 'image',
     'template'      => '<div class="input-group">{input}<span class="input-group-btn">{button}</span></div>',
     'options'       => ['class' => 'form-control'],
@@ -145,7 +154,15 @@ use t2cms\sitemanager\components\Languages;
 <div class="panel panel-default">
     <div class="panel-heading"><?=\Yii::t('nsblog', 'Settings of view');?></div>
     <div class="panel-body">
-        <?= $form->field($model, 'access_read')->dropDownList([0 => \Yii::t('nsblog', 'Every One'), 1 => \Yii::t('nsblog', 'No One'), 2 => \Yii::t('nsblog', 'Admin')]) ?>
+        <?= $form->field($model, 'access_read')->dropDownList(
+            array_merge(
+                [
+                    'everyone' => \Yii::t('t2cms', 'Everyone') 
+                ],
+                $roles
+            )
+        ) ?>
+        <hr/>
         <?= $form->field($model, 'records_per_page')->textInput(['maxlength' => true])?>
         <?//= $form->field($model, 'sort')->textInput(['maxlength' => true])?>
         <hr/>

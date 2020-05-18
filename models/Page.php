@@ -20,7 +20,7 @@ use Yii;
  * @property int|null $domain_id
  * @property int|null $lang_id
  * @property int $status
- * @property int $access_read
+ * @property string $access_read
  * @property int $publish_at
  * @property int $created_at
  * @property int $updated_at
@@ -67,8 +67,8 @@ class Page extends \yii\db\ActiveRecord
     {
         return [
             [['url', 'publish_at', 'access_read'], 'required'],
-            [['author_id', 'position', 'category_id', 'access_read', 'status'], 'integer'],
-            [['url', 'main_template', 'page_template'], 'string', 'max' => 255],
+            [['author_id', 'position', 'category_id', 'status'], 'integer'],
+            [['url', 'main_template', 'page_template', 'access_read'], 'string', 'max' => 255],
             [['settings'], 'string'],
             [['publish_at'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['publish_at'], 'default', 'value' => date('Y-m-d H:i:s')],

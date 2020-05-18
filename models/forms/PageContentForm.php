@@ -27,6 +27,9 @@ class PageContentForm extends Model
     public $description;
     public $og_title;
     public $og_description;
+    public $og_url;
+    public $og_sitename;
+    public $og_type;
 
     /**
      * {@inheritdoc}
@@ -37,7 +40,7 @@ class PageContentForm extends Model
             [['name', 'h1', 'image', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
             [['src_id'], 'integer'],
             [['preview_text', 'full_text', 'description', 'og_description'], 'string'],
-            [['name', 'h1', 'image', 'title', 'og_title', 'keywords'], 'string', 'max' => 255],
+            [['name', 'h1', 'image', 'title', 'og_title', 'keywords', 'og_url', 'og_sitename', 'og_type'], 'string', 'max' => 255],
             [['src_id'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['src_id' => 'id']],            
         ];
     }
@@ -56,10 +59,13 @@ class PageContentForm extends Model
             'preview_text' => \Yii::t('app', 'Preview Text'),
             'full_text' => \Yii::t('app', 'Full Text'),
             'title' => \Yii::t('app', 'Title'),
-            'og_title' => \Yii::t('app', 'Og Title'),
+            'og_title' => \Yii::t('app', 'OG Title'),
             'keywords' => \Yii::t('app', 'Keywords'),
             'description' => \Yii::t('app', 'Description'),
-            'og_description' => \Yii::t('app', 'Og Description'),
+            'og_description' => \Yii::t('app', 'OG Description'),
+            'og_url'      => \Yii::t('app', 'OG Url'),
+            'og_sitename' => \Yii::t('app', 'OG Sitename'),
+            'og_type'     => \Yii::t('app', 'OG Type')
         ];
     }
 }

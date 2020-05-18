@@ -1,6 +1,19 @@
 (function() {
 'use strict';
 
+//loadAcf();
+
+if($('.js-field-counter').length > 0) {
+    
+    $('.js-field-counter').each(function(){
+        let counter = $(this).find('.form__field-counter');
+        $(this).find('input, textarea').on('input', function(){
+            let count = $(this).val().length;
+            counter.text(count);
+        });
+    });
+}
+
 $('#group-controls > button').click(function(){
     const selected = $("#blog-grid").yiiGridView("getSelectedRows");
     
@@ -224,5 +237,12 @@ function transliterate(word){
   return word.split('').map(function (char) { 
     return a[char] || char; 
   }).join("");
+}
+
+function loadAcf(){
+    const acf  = $('#acf');
+    const data = JSON.parse(acf.data);
+    
+    console.log(data);
 }
 })();

@@ -19,7 +19,7 @@ use yii\db\Expression;
  * @property int $depth
  * @property int $parent_id
  * @property int $position
- * @property int $access_read
+ * @property string $access_read
  * @property int $publish_at
  * @property int $created_at
  * @property int $updated_at
@@ -42,6 +42,8 @@ use yii\db\Expression;
  */
 class Category extends \yii\db\ActiveRecord
 {
+    const TYPE = 'blog';
+    
     const ROOT_ID = 1;
     
     const OFFSET_ROOT = 1;
@@ -98,13 +100,13 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['url', 'author_id', 'status', 'publish_at', 'access_read'], 'required'],
-            [['author_id', 'status', 'tree', 'lft', 'rgt', 'depth', 'position', 'access_read', 'parent_id', 'records_per_page'], 'integer'],
+            [['author_id', 'status', 'tree', 'lft', 'rgt', 'depth', 'position', 'parent_id', 'records_per_page'], 'integer'],
             [['position'], 'default', 'value' => 0],
             [['status'], 'default', 'value' => self::STATUS['DRAFT']],
             [['records_per_page'], 'default', 'value' => 15],
             [['publish_at'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['publish_at'], 'default', 'value' => date('Y-m-d H:i:s')],
-            [['url', 'sort', 'main_template', 'category_template', 'page_template'], 'string', 'max' => 255],
+            [['url', 'sort', 'main_template', 'category_template', 'page_template', 'access_read'], 'string', 'max' => 255],
             ['url', 'checkUrl'],
             [['url'], 'match', 'pattern' => '/^[\w-]+$/', 
                 'message' => 'The field can contain only latin letters, numbers, and signs "_", "-"'],
@@ -421,5 +423,11 @@ class Category extends \yii\db\ActiveRecord
             Category::STATUS['PUBLISHED'] => \Yii::t('nsblog', 'Published'),
             Category::STATUS['ARCHIVE']   => \Yii::t('nsblog', 'Archive'),
         ];
+    }
+    
+    public function afterFind() {
+        parent::afterFind();
+        
+        $this->settings = json_decode($this->settings, true);
     }
 }
