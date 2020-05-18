@@ -30,6 +30,8 @@ class CategoriesController extends Controller
         
         $this->categoryService    = $categoryService;
         $this->categoryRepository = $categoryRepository;
+        
+        $this->viewPath = '@themePath/blog/categories';
     }
     
     public function actionView($id)
