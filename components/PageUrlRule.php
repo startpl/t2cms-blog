@@ -29,6 +29,7 @@ class PageUrlRule extends BaseObject implements UrlRuleInterface
 
     public function parseRequest($manager, $request)
     {
+        
         \Yii::$app->cache->flush();
         if (preg_match('#^' . $this->prefix . '/?(.*[a-z0-9\-\_])/?$#is', $request->pathInfo, $matches)) {
             $path = $matches['1'];
@@ -36,6 +37,7 @@ class PageUrlRule extends BaseObject implements UrlRuleInterface
             if($result = $this->page->parseRequest($path)){
                 return $result;
             }
+            
         }
         
         return false;

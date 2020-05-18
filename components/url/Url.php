@@ -49,18 +49,14 @@ abstract class Url extends \yii\base\BaseObject{
     }
     
     public function parseRequest($path)
-    {
-        $result = \Yii::$app->cache->getOrSet([$this->routeName, 'path' => $path], function () use ($path) {
-
-            if (!$model = $this->repository->getByPath($path)) {
-                return ['id' => null, 'path' => null];
-            }
-            
-            if(!$this->isActive($model)) return false;
-            
-            return ['id' => $model->id];
-        });
-
+    {       
+        if (!$model = $this->repository->getByPath($path)) {
+            $result = ['id' => null, 'path' => null];
+        } else {
+            if(!$this->isActive($model) || !$this->checkAccess($model)) $result = false;
+            $result = ['id' => $model->id];
+        }
+        
         if (empty($result['id'])) {
             return false;
         }

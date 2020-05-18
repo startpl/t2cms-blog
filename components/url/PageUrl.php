@@ -65,4 +65,24 @@ class PageUrl extends Url {
         
         return (bool)($model->status == Page::STATUS['PUBLISHED'] && strtotime($model->publish_at) < time());
     }
+    
+    protected function checkAccess(Page $model): bool
+    {
+        return true;
+        
+        $parent = $model->category;
+        
+        if($parent->id != Category::ROOT_ID){
+            $sections   = $parent->parents()->andWhere(['>=', 'depth', Category::OFFSET_ROOT])->all();
+            $sections[] = $parent;
+            
+            foreach($sections as $category){
+                if($category->access_read != 'everyone' && (\Yii::$app->user->can($category->access_role))) {
+                    return false;
+                }
+            }
+        }
+        
+        return (bool)($category->access_read != 'everyone' && (\Yii::$app->user->can($category->access_role)));
+    }
 }
