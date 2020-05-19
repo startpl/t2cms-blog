@@ -14,7 +14,9 @@ use yii\base\InvalidParamException;
  *
  * @author Koperdog <koperdog@github.com>
  */
-abstract class Url extends \yii\base\BaseObject{
+abstract class Url extends \yii\base\BaseObject
+{
+    const ALLOW_ALWAYS = ['everyone', 'user'];
     
     protected $routeName = "route";
     protected $urlPath   = 'blog/index';
@@ -53,14 +55,14 @@ abstract class Url extends \yii\base\BaseObject{
         if (!$model = $this->repository->getByPath($path)) {
             $result = ['id' => null, 'path' => null];
         } else {
-            if(!$this->isActive($model) || !$this->checkAccess($model)) $result = false;
+            if(!$this->isActive($model) || !$this->checkAccess($model)) return false;
             $result = ['id' => $model->id];
         }
         
         if (empty($result['id'])) {
             return false;
         }
-
+                
         return [$this->urlPath, ['id' => $result['id']]];
     }
     

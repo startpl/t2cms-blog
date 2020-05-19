@@ -53,12 +53,12 @@ class CategoryUrl extends Url {
     }
     
     protected function checkAccess(Category $model): bool
-    {
+    {        
         $sections   = $model->parents()->andWhere(['>=', 'depth', Category::OFFSET_ROOT])->all();
         $sections[] = $model;
         
         foreach($sections as $category){
-            if($category->access_read != 'everyone' && (\Yii::$app->user->can($category->access_role))) {
+            if(!in_array($category->access_read, self::ALLOW_ALWAYS) && !(\Yii::$app->user->can($category->access_read))) {
                 return false;
             }
         }

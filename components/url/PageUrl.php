@@ -67,9 +67,7 @@ class PageUrl extends Url {
     }
     
     protected function checkAccess(Page $model): bool
-    {
-        return true;
-        
+    {        
         $parent = $model->category;
         
         if($parent->id != Category::ROOT_ID){
@@ -77,12 +75,12 @@ class PageUrl extends Url {
             $sections[] = $parent;
             
             foreach($sections as $category){
-                if($category->access_read != 'everyone' && (\Yii::$app->user->can($category->access_role))) {
+                if(!in_array($category->access_read, self::ALLOW_ALWAYS) && !(\Yii::$app->user->can($category->access_read))) {
                     return false;
                 }
             }
         }
-        
-        return (bool)($category->access_read != 'everyone' && (\Yii::$app->user->can($category->access_role)));
+               
+        return (in_array($model->access_read, self::ALLOW_ALWAYS) || \Yii::$app->user->can($model->access_read));
     }
 }
