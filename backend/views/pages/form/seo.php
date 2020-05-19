@@ -17,8 +17,8 @@
 
 <?= $form->field($model->pageContent, 'keywords')->textInput(['maxlength' => true]) ?>
 
-<?= $form->field($model->categoryContent, 'og_title', ['options' => ['id' => 'field-og_title']])->textInput(['maxlength' => true]) ?>
-<?= $form->field($model->categoryContent, 'og_description')->textarea(['options' => ['id' => 'field-og_description']]) ?>
-<?= $form->field($model->categoryContent, 'og_url', ['options' => ['id' => 'field-og_url']])->textInput(['maxlength' => true]) ?>
-<?= $form->field($model->categoryContent, 'og_sitename', ['options' => ['id' => 'field-og_sitename']])->textInput(['maxlength' => true]) ?>
-<?= $form->field($model->categoryContent, 'og_type', ['options' => ['id' => 'field-og_type']])->textInput(['maxlength' => true]) ?>
+<?= $form->field($model->pageContent, 'og_title', ['options' => ['id' => 'field-og_title']])->textInput(['maxlength' => true]) ?>
+<?= $form->field($model->pageContent, 'og_description')->textarea(['options' => ['id' => 'field-og_description']]) ?>
+<?= $form->field($model->pageContent, 'og_url', ['options' => ['id' => 'field-og_url']])->textInput(['maxlength' => true]) ?>
+<?= $form->field($model->pageContent, 'og_sitename', ['options' => ['id' => 'field-og_sitename']])->textInput(['maxlength' => true]) ?>
+<?= $form->field($model->pageContent, 'og_type', ['options' => ['id' => 'field-og_type']])->textInput(['maxlength' => true]) ?>

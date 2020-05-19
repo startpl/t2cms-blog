@@ -51,7 +51,7 @@ class PageContent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['src_id', 'name', 'h1', 'image', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
+            [['src_id', 'name', 'h1', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
             [['src_id', 'domain_id', 'language_id'], 'integer'],
             [['preview_text', 'full_text', 'description', 'og_description'], 'string'],
             [['name', 'h1', 'image', 'title', 'og_title', 'keywords', 'og_url', 'og_sitename', 'og_type'], 'string', 'max' => 255],
