@@ -57,7 +57,7 @@ $this->registerJsVar('i18n', [
     
     <?php Pjax::begin(); ?>
         
-    <?=    \t2cms\treeview\TreeView::widget([
+    <?=    \t2cms\base\widgets\treeview\TreeView::widget([
         'dataProvider' => $dataProvider,
         'filterModel'  => $searchForm,
         'id' => 'blog-grid',
@@ -65,7 +65,7 @@ $this->registerJsVar('i18n', [
         'depthRoot' => 1,
         'columns' => [
             [
-                'class' => '\t2cms\treeview\base\CheckboxColumn',
+                'class' => '\t2cms\base\widgets\treeview\base\CheckboxColumn',
             ],
             'id',
             [
