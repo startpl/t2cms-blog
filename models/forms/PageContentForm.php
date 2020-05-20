@@ -30,6 +30,8 @@ class PageContentForm extends Model
     public $og_url;
     public $og_sitename;
     public $og_type;
+    
+    public $tags;
 
     /**
      * {@inheritdoc}
@@ -40,7 +42,7 @@ class PageContentForm extends Model
             [['name', 'h1', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
             [['src_id'], 'integer'],
             [['preview_text', 'full_text', 'description', 'og_description'], 'string'],
-            [['name', 'h1', 'image', 'title', 'og_title', 'keywords', 'og_url', 'og_sitename', 'og_type'], 'string', 'max' => 255],
+            [['name', 'h1', 'image', 'title', 'og_title', 'keywords', 'og_url', 'og_sitename', 'og_type', 'tags'], 'string', 'max' => 255],
             [['src_id'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['src_id' => 'id']],            
         ];
     }

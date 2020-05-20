@@ -14,6 +14,8 @@
     <div class="form__field-counter"><?=mb_strlen($model->categoryContent->description)?></div>
 </div>
 
+<?= $form->field($model->categoryContent, 'tags')->textInput(['maxlength' => true]) ?>
+
 <?= $form->field($model->categoryContent, 'keywords')->textInput(['maxlength' => true]) ?>
 
 <?= $form->field($model->categoryContent, 'og_title', ['options' => ['id' => 'field-og_title']])->textInput(['maxlength' => true]) ?>

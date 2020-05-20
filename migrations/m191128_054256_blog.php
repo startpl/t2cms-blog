@@ -9,6 +9,7 @@ class m191128_054256_blog extends Migration
 {
     const PUBLISH     = 2;
     const ACCESS_READ = 'everyone';
+    
     /**
      * {@inheritdoc}
      */
@@ -21,7 +22,6 @@ class m191128_054256_blog extends Migration
 
             $this->fillData();
         } catch( \Exception $e){
-            var_dump($e);
             $this->safeDown();
             die("Something went wrong");
         }
@@ -84,7 +84,8 @@ class m191128_054256_blog extends Migration
             'og_description' => $this->text()->notNull(),
             'og_url'         => $this->string(255)->notNull(),
             'og_sitename'    => $this->string(255)->notNull(),
-            'og_type'        => $this->string(255)->notNull()
+            'og_type'        => $this->string(255)->notNull(),
+            'tags'           => $this->string(255)
         ]);
         
         $this->addForeignKey('fk-content_category-src_id', '{{%category_content}}', 'src_id', '{{%category}}', 'id', 'CASCADE');
@@ -130,7 +131,8 @@ class m191128_054256_blog extends Migration
             'og_description' => $this->text()->notNull(),
             'og_url'         => $this->string(255),
             'og_sitename'    => $this->string(255),
-            'og_type'        => $this->string(255)
+            'og_type'        => $this->string(255),
+            'tags'           => $this->string(255),
         ]);
         
         $this->addForeignKey('fk-page_content-src_id', '{{%page_content}}', 'src_id', '{{%page}}', 'id', 'CASCADE');

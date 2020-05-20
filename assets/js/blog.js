@@ -14,6 +14,13 @@ if($('.js-field-counter').length > 0) {
     });
 }
 
+if($('.js-save-and-close').length > 0) {
+    $('.js-save-and-close').click(function(){
+        $('#close-identity').val(true);
+        $('#btn-save-top').click();
+    });
+}
+
 $('#group-controls > button').click(function(){
     const selected = $("#blog-grid").yiiGridView("getSelectedRows");
     

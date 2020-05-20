@@ -29,6 +29,9 @@
 .blog-edit .section.active{
     display:block;
 }
+.blog-edit > .text-right {
+    margin-bottom: 10px;
+}
 #section_tabs{
     margin-bottom:20px;
 }

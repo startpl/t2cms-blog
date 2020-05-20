@@ -111,6 +111,8 @@ class PagesController extends Controller
         $allCategories = $this->findCategories($domain_id, $language_id);
         $allPages      = $this->findPages($domain_id, $language_id);
         
+        $willClose = (bool)\Yii::$app->request->post('close-identity');
+        
         if (
             $form->load(Yii::$app->request->post()) && $form->validate()
             && $form->pageContent->load(Yii::$app->request->post()) && $form->pageContent->validate()
@@ -118,7 +120,7 @@ class PagesController extends Controller
         {   
             if($model = $this->pageService->create($form)){
                 \Yii::$app->session->setFlash('success', \Yii::t('nsblog', 'Success create'));
-                return $this->redirect(['update', 'id' => $model->id]);
+                return $willClose? $this->redirect(['index']) : $this->redirect(['update', 'id' => $model->id]);
             }
             else{
                 \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Error create'));
@@ -151,12 +153,15 @@ class PagesController extends Controller
         
         $allCategories = $this->findCategories($domain_id, $language_id);
         $allPages      = $this->findPages($domain_id, $language_id, $id);
+        
+        $willClose = (bool)\Yii::$app->request->post('close-identity');
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()
             && $form->pageContent->load(Yii::$app->request->post()) && $form->pageContent->validate()) {
+            
             if($this->pageService->save($model, $form, $domain_id, $language_id)){
                 \Yii::$app->session->setFlash('success', \Yii::t('nsblog', 'Success update'));
-                return $this->refresh();
+                return $willClose? $this->redirect(['index']) : $this->refresh();
             }
             else{
                 \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Error update'));

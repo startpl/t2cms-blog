@@ -114,6 +114,8 @@ class DefaultController extends Controller
         $allCategories = $this->findCategories($this->domain_id, $this->language_id);
         $allPages      = $this->findPages($this->domain_id, $this->language_id);
         
+        $willClose = (bool)\Yii::$app->request->post('close-identity');
+        
         if (
             $form->load(Yii::$app->request->post()) && $form->validate()
             && $form->categoryContent->load(Yii::$app->request->post()) && $form->categoryContent->validate()
@@ -121,7 +123,7 @@ class DefaultController extends Controller
         {   
             if($model = $this->categoryService->create($form)){
                 \Yii::$app->session->setFlash('success', \Yii::t('nsblog', 'Success create'));
-                return $this->redirect(['update', 'id' => $model->id]);
+                return $willClose? $this->redirect(['index']) : $this->redirect(['update', 'id' => $model->id]);
             }
             else{
                 \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Error create'));
@@ -129,7 +131,6 @@ class DefaultController extends Controller
         }
         else if(Yii::$app->request->post() && (!$form->validate() || !$form->categoryContent->validate())){
             \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Fill in required fields'));
-            exit;
         }
         
         return $this->render('create', [
@@ -155,12 +156,14 @@ class DefaultController extends Controller
         $allCategories = $this->findCategories($this->domain_id, $this->language_id, $id);
         $allPages      = $this->findPages($this->domain_id, $this->language_id);
         
+        $willClose = (bool)\Yii::$app->request->post('close-identity');
+                
         if(
             $form->load(Yii::$app->request->post()) && $form->validate()
             && $form->categoryContent->load(Yii::$app->request->post()) && $form->categoryContent->validate()){
             if($this->categoryService->save($model, $form, $this->domain_id, $this->language_id)){
                 \Yii::$app->session->setFlash('success', \Yii::t('nsblog', 'Success update'));
-                return $this->refresh();
+                return $willClose? $this->redirect(['index']) : $this->refresh();
             }
             else{
                 \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Error update'));

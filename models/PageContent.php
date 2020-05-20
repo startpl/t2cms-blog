@@ -28,6 +28,8 @@ use t2cms\sitemanager\models\{
  * @property string $og_url
  * @property string $og_sitename
  * @property string $og_type
+ * 
+ * @property string $tags
  *
  * @property Page $page
  * @property Domain $domain
@@ -54,7 +56,7 @@ class PageContent extends \yii\db\ActiveRecord
             [['src_id', 'name', 'h1', 'preview_text', 'full_text', 'title', 'og_title', 'keywords', 'description', 'og_description'], 'required'],
             [['src_id', 'domain_id', 'language_id'], 'integer'],
             [['preview_text', 'full_text', 'description', 'og_description'], 'string'],
-            [['name', 'h1', 'image', 'title', 'og_title', 'keywords', 'og_url', 'og_sitename', 'og_type'], 'string', 'max' => 255],
+            [['name', 'h1', 'image', 'title', 'og_title', 'keywords', 'og_url', 'og_sitename', 'og_type', 'tags'], 'string', 'max' => 255],
             [['src_id'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['src_id' => 'id']],
             [['domain_id'], 'exist', 'skipOnError' => true, 'targetClass' => Domain::className(), 'targetAttribute' => ['domain_id' => 'id']],
             [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => Language::className(), 'targetAttribute' => ['language_id' => 'id']],
@@ -81,6 +83,7 @@ class PageContent extends \yii\db\ActiveRecord
             'keywords' => Yii::t('app', 'Keywords'),
             'description' => Yii::t('app', 'Description'),
             'og_description' => Yii::t('app', 'Og Description'),
+            'tags'  => Yii::t('app', 'Tags'),
         ];
     }
 
