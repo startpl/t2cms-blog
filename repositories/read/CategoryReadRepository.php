@@ -4,8 +4,7 @@ namespace startpl\t2cmsblog\repositories\read;
 
 use yii\helpers\ArrayHelper;
 use startpl\t2cmsblog\models\{
-    Category,
-    CategoryContentQuery
+    Category
 };
 
 /**

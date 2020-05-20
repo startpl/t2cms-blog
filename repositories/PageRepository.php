@@ -113,7 +113,7 @@ class PageRepository {
         
         $page = array_pop($sections);
         
-        if(count($sections)){
+        if(count($sections) > 0){
             $category = Category::find()
                     ->where(['url' => array_shift($sections), 'depth' => Category::OFFSET_ROOT])
                     ->one();
@@ -125,9 +125,12 @@ class PageRepository {
                     $category = $category->children(1)->where(['url' => $section, 'depth' => $key + $offset])->one();
                 }
             }
+            $categoryId = $category->id;
+        } else {
+            $categoryId = Category::ROOT_ID;
         }
         
-        return Page::find()->where(['url' => $page, 'category_id' => $category->id])->one();
+        return Page::find()->where(['url' => $page, 'category_id' => $categoryId])->one();
     }
     
     private function copyPageContent(\yii\db\ActiveRecord $model, $domain_id, $language_id)
