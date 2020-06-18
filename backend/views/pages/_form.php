@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use startpl\t2cmsblog\hooks\PageForm;
+use yii\helpers\Inflector;
 
 /* @var $this yii\web\View */
 /* @var $model startpl\t2cmsblog\models\Category */
@@ -15,6 +17,15 @@ $this->registerJsVar('error_message', \Yii::t('nsblog/error', 'The form contains
         <div class="btn-group" role="group" id="section_tabs">
             <button type="button" class="btn btn-default active" data-section="main"><?=\Yii::t('nsblog', 'Category')?></button>
             <button type="button" class="btn btn-default" data-section="seo"><?=\Yii::t('nsblog', 'SEO')?></button>
+            <?php foreach(PageForm::getSections() as $title => $section): ?>
+                <button 
+                    type="button" 
+                    class="btn btn-default" 
+                    data-section="<?=Inflector::slug($title)?>"
+                >
+                <?=\Yii::t('t2cms', $title)?>
+                </button>
+            <?php endforeach;?>
         </div>
         
         <div class="zone-section">
@@ -51,6 +62,15 @@ $this->registerJsVar('error_message', \Yii::t('nsblog/error', 'The form contains
             'model' => $model
         ]) ?>
     </div>
+    
+    <?php foreach(PageForm::getSections() as $title => $section): ?>
+        <div 
+            id="<?=Inflector::slug($title)?>"
+            class="section" 
+        >
+        <?=$section?>
+        </div>
+    <?php endforeach;?>
     
     <div class="form-group">
         <?= Html::submitButton(Yii::t('nsblog', 'Save'), ['class' => 'btn btn-success', 'id' => 'btn-save-post']) ?>

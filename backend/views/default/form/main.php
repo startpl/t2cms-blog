@@ -6,6 +6,7 @@ use t2cms\sitemanager\components\Domains;
 use t2cms\sitemanager\components\Languages;
 use t2cms\user\common\repositories\RoleRepository;
 use yii\helpers\ArrayHelper;
+use startpl\t2cmsblog\hooks\CategoryForm;
 
 $roles = ArrayHelper::map(RoleRepository::getAll(), 'name', 'description');
 
@@ -47,8 +48,9 @@ foreach($roles as &$role) {
 </div>
 
 <?= $form->field($model, 'parent_id')->dropDownList(
-    startpl\t2cmsblog\models\Category::getTree($model->id, Domains::getEditorDomainId(), Languages::getEditorLangaugeId()), 
-    ['prompt' => Yii::t('nsblog','No Parent'), 'class' => 'form-control']
+    [Category::ROOT_ID => \Yii::t('nsblog','No Parent')]
+    +Category::getTree($model->id, Domains::getEditorDomainId(), Languages::getEditorLangaugeId()), 
+    ['class' => 'form-control']
 );?>
 
 <?= $form->field($model->categoryContent, 'h1')->textInput(['maxlength' => true]) ?>
@@ -176,3 +178,10 @@ foreach($roles as &$role) {
         <?= $form->field($model, 'pageTemplateApplySub')->checkbox()?>
     </div>
 </div>
+
+<?php foreach(CategoryForm::getMainSections() as $title => $section): ?>
+<div class="panel panel-default">
+    <div class="panel-heading"><?=\Yii::t('t2cms', $title);?></div>
+    <div class="panel-body"><?=$section?></div>
+</div>
+<?php endforeach;?>

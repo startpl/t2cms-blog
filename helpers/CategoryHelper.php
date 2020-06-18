@@ -24,7 +24,7 @@ use startpl\t2cmsblog\models\Category;
 class CategoryHelper implements BlogHelper
 {
     
-    public static function get(int $id, $domain_id = null, $language_id = null): ?array
+    public static function get(int $id, $domain_id = null, $language_id = null): ?Category
     {
         $domain_id   = self::getCurrentDomain($domain_id);
         $language_id = self::getCurrentLanguage($language_id);
@@ -62,6 +62,14 @@ class CategoryHelper implements BlogHelper
         $language_id = self::getCurrentLanguage($language_id);
         
         return CategoryReadRepository::getAll($domain_id, $language_id);
+    }
+    
+    public static function getAllSort($domain_id = null, $language_id = null): ?array
+    {
+        $domain_id   = self::getCurrentDomain($domain_id);
+        $language_id = self::getCurrentLanguage($language_id);
+        
+        return CategoryReadRepository::getAllSort($domain_id, $language_id);
     }
     
     public static function getAllAsTree($domain_id = null, $language_id = null): ?array

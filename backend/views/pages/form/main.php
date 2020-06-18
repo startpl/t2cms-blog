@@ -7,6 +7,7 @@ use t2cms\sitemanager\components\{
 };
 use t2cms\user\common\repositories\RoleRepository;
 use yii\helpers\ArrayHelper;
+use startpl\t2cmsblog\hooks\PageForm;
 
 $roles = ArrayHelper::map(RoleRepository::getAll(), 'name', 'description');
 
@@ -171,3 +172,10 @@ foreach($roles as &$role) {
         <?= $form->field($model, 'pageTemplateApplySub')->checkbox()?>
     </div>
 </div>
+
+<?php foreach(PageForm::getMainSections() as $title => $section): ?>
+<div class="panel panel-default">
+    <div class="panel-heading"><?=\Yii::t('t2cms', $title);?></div>
+    <div class="panel-body"><?=$section?></div>
+</div>
+<?php endforeach;?>

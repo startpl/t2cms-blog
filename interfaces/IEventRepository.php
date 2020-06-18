@@ -12,5 +12,14 @@ namespace startpl\t2cmsblog\interfaces;
  *
  * @author Koperdog <koperdog.dev@gmail.com>
  */
-interface BlogHelper {
+interface IEventRepository 
+{
+    const EVENT_SEARCH = 'searc';
+    const EVENT_SHOW   = 'show';
+    
+    const EVENT_GET    = 'get';
+    const EVENT_SAVE   = 'save';
+    const EVENT_DELETE = 'delete';
+    
+    const EVENT_GET_ALL = 'getAll';
 }

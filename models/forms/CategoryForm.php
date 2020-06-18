@@ -12,7 +12,7 @@ use startpl\t2cmsblog\models\{
  * Setting create form
  */
 class CategoryForm extends Model
-{    
+{       
     public $id;
     public $url;
     public $status;

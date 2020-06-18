@@ -48,11 +48,10 @@ class CategoryService {
         
         $transaction = \Yii::$app->db->beginTransaction();
         try{
-            if($model->getDirtyAttributes(['parent_id']) && ($model->id != $model->parent_id)){
+            if($model->parent_id != $model->oldAttributes['parent_id'] && ($model->id != $model->parent_id)) {
                 if(empty($model->parent_id)) $model->parent_id = 1;
                 $this->repository->appendTo($model);
-            }
-            else{
+            } else {
                 $this->repository->save($model);
             }
             

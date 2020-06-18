@@ -48,8 +48,10 @@ class Category extends \yii\db\ActiveRecord
     
     const OFFSET_ROOT = 1;
     const SOURCE_TYPE = 0;
-    
+        
     const STATUS = ['DRAFT' => 1, 'PUBLISHED' => 2, 'ARCHIVE' => 3];
+    
+    const NODE_TYPE = 'NODE';
     
     public $addCategories;
     public $addPages;
@@ -59,6 +61,8 @@ class Category extends \yii\db\ActiveRecord
     
     public $children;
     public $parents;
+    
+        
     /**
      * {@inheritdoc}
      */
@@ -142,6 +146,12 @@ class Category extends \yii\db\ActiveRecord
             'rltPages' => Yii::t('nsblog', 'Related Pages'),
             'records_per_page' => Yii::t('nsblog', 'Record per page'),
         ];
+    }
+    
+    public function getParents(): ?array
+    {
+        $parents = $this->parents()->all();
+        return $parents;
     }
     
     /**

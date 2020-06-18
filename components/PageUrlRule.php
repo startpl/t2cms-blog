@@ -9,19 +9,12 @@ class PageUrlRule extends BaseObject implements UrlRuleInterface
 {
     public $prefix = '';
     
-    private $page;
-    
-    private $repository;
-        
-    public function init()
-    {
-        $this->initManager();
-    }
+    private static $page;
     
     public function createUrl($manager, $route, $params)
     {
         if ($route === 'blog/page') {
-            return $this->page->createUrl($params);
+            return $this->getManager()->createUrl($params);
         }
         
         return false;
@@ -34,7 +27,7 @@ class PageUrlRule extends BaseObject implements UrlRuleInterface
         if (preg_match('#^' . $this->prefix . '/?(.*[a-z0-9\-\_])/?$#is', $request->pathInfo, $matches)) {
             $path = $matches['1'];
             
-            if($result = $this->page->parseRequest($path)){
+            if($result = $this->getManager()->parseRequest($path)){
                 return $result;
             }
             
@@ -43,8 +36,12 @@ class PageUrlRule extends BaseObject implements UrlRuleInterface
         return false;
     }
     
-    private function initManager()
+    private function getManager()
     {
-        $this->page = \Yii::createObject(['class' => url\PageUrl::className(), 'owner' => $this]);
+        if(!self::$page) {
+            self::$page = \Yii::createObject(['class' => url\PageUrl::className(), 'owner' => $this]);
+        }
+        
+        return self::$page;
     }
 }

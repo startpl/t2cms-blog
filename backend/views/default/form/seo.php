@@ -1,4 +1,7 @@
 <?php
+
+use startpl\t2cmsblog\hooks\CategoryForm;
+
 /**
  * @var $this yii\web\View
  * @var form yii\widgets\ActiveForm;
@@ -23,3 +26,10 @@
 <?= $form->field($model->categoryContent, 'og_url', ['options' => ['id' => 'field-og_url']])->textInput(['maxlength' => true]) ?>
 <?= $form->field($model->categoryContent, 'og_sitename', ['options' => ['id' => 'field-og_sitename']])->textInput(['maxlength' => true]) ?>
 <?= $form->field($model->categoryContent, 'og_type', ['options' => ['id' => 'field-og_type']])->textInput(['maxlength' => true]) ?>
+
+<?php foreach(CategoryForm::getSeoSections() as $title => $section): ?>
+<div class="panel panel-default">
+    <div class="panel-heading"><?=\Yii::t('t2cms', $title);?></div>
+    <div class="panel-body"><?=$section?></div>
+</div>
+<?php endforeach;?>

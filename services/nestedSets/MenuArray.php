@@ -21,10 +21,11 @@ use t2cms\sitemanager\components\{
  * @author Koperdog <koperdog.dev@gmail.com>
  * @version 1.0
  */
-class MenuArray {
+class MenuArray 
+{
     static function getData()
     {
-        $collection = CategoryHelper::getAll(Domains::getEditorDomainId(), Languages::getEditorLangaugeId());
+        $collection = CategoryHelper::getAllSort(Domains::getEditorDomainId(), Languages::getEditorLangaugeId());
         
         $menu = [];
 
@@ -33,6 +34,8 @@ class MenuArray {
             $menu = $nsTree->tree($collection);
         }
         
+//        debug($collection);
+                
         $path = \Yii::$app->request->get();
         
         $url = ['PageSearch' => ['category' => Category::ROOT_ID]];

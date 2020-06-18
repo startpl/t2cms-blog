@@ -9,19 +9,12 @@ class CategoryUrlRule extends BaseObject implements UrlRuleInterface
 {
     public $prefix = '';
     
-    private $category;
-    
-    private $repository;
-        
-    public function init()
-    {
-        $this->initManager();
-    }
-    
+    private static $category;   
+            
     public function createUrl($manager, $route, $params)
     {
         if ($route === 'blog/category') {
-            return $this->category->createUrl($params);
+            return self::getManager()->createUrl($params);
         }
         
         return false;
@@ -29,11 +22,10 @@ class CategoryUrlRule extends BaseObject implements UrlRuleInterface
 
     public function parseRequest($manager, $request)
     {
-        \Yii::$app->cache->flush();
         if (preg_match('#^' . $this->prefix . '/?(.*[a-z0-9\-\_])/?$#is', $request->pathInfo, $matches)) {
-            $path = $matches['1'];
+            $path = $matches[1];
             
-            if($result = $this->category->parseRequest($path)){
+            if($result = self::getManager()->parseRequest($path)){
                 return $result;
             }
         }
@@ -41,8 +33,12 @@ class CategoryUrlRule extends BaseObject implements UrlRuleInterface
         return false;
     }
     
-    private function initManager()
+    private function getManager()
     {
-        $this->category = \Yii::createObject(['class' => url\CategoryUrl::className(), 'owner' => $this]);
+        if(!self::$category) {
+            self::$category = \Yii::createObject(['class' => url\CategoryUrl::className(), 'owner' => $this]);
+        }
+        
+        return self::$category;
     }
 }

@@ -17,12 +17,16 @@ use startpl\t2cmsblog\repositories\{
 use \startpl\t2cmsblog\models\forms\PageForm;
 use \t2cms\sitemanager\components\Domains;
 use \t2cms\sitemanager\components\Languages;
+use startpl\t2cmsblog\interfaces\IEventRepository;
+use startpl\t2cmsblog\events\EventDispatcher;
 
 /**
  * PageController implements the CRUD actions for Page model.
  */
 class PagesController extends Controller
 {
+    private $eventDispatcher;
+    
     private $pageService;
     private $pageRepository;
     private $categoryRepository;
@@ -61,6 +65,7 @@ class PagesController extends Controller
         PageService $pageService,
         PageRepository $pageRepository,
         CategoryRepository $categoryRepository,
+        EventDispatcher $eventDispatcher,
         $config = []
     )
     {
@@ -69,6 +74,8 @@ class PagesController extends Controller
         $this->pageService        = $pageService;
         $this->pageRepository     = $pageRepository;
         $this->categoryRepository = $categoryRepository;
+        
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -127,6 +134,11 @@ class PagesController extends Controller
             }
         }
         
+        $event = new \startpl\t2cmsblog\events\category\ShowEvent([
+            'model' => null
+        ]);
+        $this->eventDispatcher->trigger(IEventRepository::EVENT_SHOW, $event);
+        
         return $this->render('create', [
                 'model' => $form,
                 'allCategories' => $allCategories,
@@ -170,6 +182,11 @@ class PagesController extends Controller
         else if(Yii::$app->request->post() && (!$form->validate() || $form->pageContent->validate())){
             \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Fill in required fields'));
         }
+        
+        $event = new \startpl\t2cmsblog\events\category\ShowEvent([
+            'model' => $model
+        ]);
+        $this->eventDispatcher->trigger(IEventRepository::EVENT_SHOW, $event);
 
         return $this->render('update', [
             'model' => $form,

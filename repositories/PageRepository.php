@@ -9,13 +9,16 @@ use startpl\t2cmsblog\models\{
     PageContent
 };
 
+use startpl\t2cmsblog\interfaces\IEventRepository;
+
 /**
  * Description of CategoryRepository
  *
  * @author Koperdog <koperdog@github.com>
  * @version 1.0
  */
-class PageRepository {
+class PageRepository extends \yii\base\Component implements IEventRepository
+{
     
     private $searchModel = null;
     
@@ -33,6 +36,11 @@ class PageRepository {
             throw new \DomainException("Page with id: {$id} was not found");
         }
         
+        $event = new \startpl\t2cmsblog\events\page\GetEvent([
+            'model' => $model
+        ]);
+        $this->trigger(IEventRepository::EVENT_GET, $event);
+        
         return $model;
     }
     
@@ -40,6 +48,11 @@ class PageRepository {
     {
         $this->searchModel = new PageSearch();
         $dataProvider = $this->searchModel->search($params, $domain_id, $language_id);
+        
+        $event = new \startpl\t2cmsblog\events\page\SearchEvent([
+            'dataProvider' => $dataProvider
+        ]);
+        $this->trigger(IEventRepository::EVENT_SEARCH, $event);
         
         return $dataProvider;
     }
@@ -49,6 +62,11 @@ class PageRepository {
         if(!$model->save()){
             throw new \RuntimeException('Error saving model');
         }
+        
+        $event = new \startpl\t2cmsblog\events\page\SaveEvent([
+            'model' => $model
+        ]);
+        $this->trigger(IEventRepository::EVENT_SAVE, $event);
         
         return true;
     }
@@ -89,22 +107,41 @@ class PageRepository {
         else{
             throw new \RuntimeException("Error delete");
         }
+        
+        $event = new \startpl\t2cmsblog\events\page\DeleteEvent([
+            'id' => $data
+        ]);
+        $this->trigger(IEventRepository::EVENT_DELETE, $event);
     }
     
     public static function getAll($domain_id = null, $language_id = null, $exclude = null): ?array
-    {                   
-        return Page::find()->withAllContent($domain_id, $language_id, $exclude)->all();
+    {          
+        $models = Page::find()->withAllContent($domain_id, $language_id, $exclude)->all();
+        
+        $event = new \startpl\t2cmsblog\events\page\GetAllEvent([
+            'models' => $models
+        ]);
+        \yii\base\Event::trigger(static::className(), IEventRepository::EVENT_GET_ALL, $event);
+        
+        return $models;
     }
     
     public static function getAllByCategory(int $category, $domain_id = null, $language_id = null): ?array
     {
-        return Page::find()
+        $models = Page::find()
             ->joinWith(['pageContent' => function($query) use ($domain_id, $language_id){
                 $in = PageContent::getAllSuitableId($domain_id, $language_id);
                 $query->andWhere(['IN','page_content.id', $in]);
             }])
             ->andWhere(['category_id' => $category])
             ->all();
+            
+        $event = new \startpl\t2cmsblog\events\page\GetAllEvent([
+            'models' => $models
+        ]);
+        \yii\base\Event::trigger(static::className(), IEventRepository::EVENT_GET_ALL, $event);
+        
+        return $models;
     }
     
     public function getByPath(string $path): ?Page

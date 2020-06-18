@@ -6,11 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace startpl\t2cmsblog\interfaces;
+namespace startpl\t2cmsblog\events\category;
 
 /**
+ * Category events system a.k.a hook
  *
  * @author Koperdog <koperdog.dev@gmail.com>
  */
-interface BlogHelper {
+class SearchEvent extends \yii\base\Event
+{
+    public $dataProvider;
 }

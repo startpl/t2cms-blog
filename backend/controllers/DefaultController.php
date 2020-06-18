@@ -16,12 +16,16 @@ use startpl\t2cmsblog\repositories\{
 use \startpl\t2cmsblog\models\forms\CategoryForm;
 use \t2cms\sitemanager\components\Domains;
 use \t2cms\sitemanager\components\Languages;
+use startpl\t2cmsblog\interfaces\IEventRepository;
+use startpl\t2cmsblog\events\EventDispatcher;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
  */
 class DefaultController extends Controller
 {
+    private $eventDispatcher;
+    
     private $categoryService;
     private $categoryRepository;
     
@@ -61,6 +65,7 @@ class DefaultController extends Controller
         $module, 
         \startpl\t2cmsblog\useCases\CategoryService $categoryService,
         CategoryRepository $categoryRepository,
+        EventDispatcher $eventDispatcher,
         $config = []
     )
     {
@@ -71,6 +76,8 @@ class DefaultController extends Controller
         
         $this->domain_id   = Domains::getEditorDomainId();
         $this->language_id = Languages::getEditorLangaugeId();
+        
+        $this->eventDispatcher = $eventDispatcher;
     }
     
     public function actionSort()
@@ -133,6 +140,11 @@ class DefaultController extends Controller
             \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Fill in required fields'));
         }
         
+        $event = new \startpl\t2cmsblog\events\category\ShowEvent([
+            'model' => null
+        ]);
+        $this->eventDispatcher->trigger(IEventRepository::EVENT_SHOW, $event);
+        
         return $this->render('create', [
                 'model'         => $form,
                 'allCategories' => $allCategories,
@@ -150,6 +162,7 @@ class DefaultController extends Controller
     {        
         $model = $this->findModel($id, $this->domain_id, $this->language_id);
         
+        
         $form  = new CategoryForm();
         $form->loadModel($model);
                 
@@ -157,11 +170,14 @@ class DefaultController extends Controller
         $allPages      = $this->findPages($this->domain_id, $this->language_id);
         
         $willClose = (bool)\Yii::$app->request->post('close-identity');
-                
+        
         if(
-            $form->load(Yii::$app->request->post()) && $form->validate()
-            && $form->categoryContent->load(Yii::$app->request->post()) && $form->categoryContent->validate()){
-            if($this->categoryService->save($model, $form, $this->domain_id, $this->language_id)){
+            $form->load(Yii::$app->request->post()) 
+            && $form->validate()
+            && $form->categoryContent->load(Yii::$app->request->post()) 
+            && $form->categoryContent->validate()
+        ) {
+            if($this->categoryService->save($model, $form, $this->domain_id, $this->language_id)) {
                 \Yii::$app->session->setFlash('success', \Yii::t('nsblog', 'Success update'));
                 return $willClose? $this->redirect(['index']) : $this->refresh();
             }
@@ -169,11 +185,14 @@ class DefaultController extends Controller
                 \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Error update'));
             }
         }
-        else if(Yii::$app->request->post() && (!$form->validate() || !$form->categoryContent->validate())){
+        else if(Yii::$app->request->post() && (!$form->validate() || !$form->categoryContent->validate())) {
             \Yii::$app->session->setFlash('error', \Yii::t('nsblog/error', 'Fill in required fields'));
         }
         
-        
+        $event = new \startpl\t2cmsblog\events\category\ShowEvent([
+            'model' => $model
+        ]);
+        $this->eventDispatcher->trigger(IEventRepository::EVENT_SHOW, $event);
 
         return $this->render('update', [
             'model'         => $form,

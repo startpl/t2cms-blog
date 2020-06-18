@@ -13,8 +13,8 @@ use startpl\t2cmsblog\models\{
  * @author Koperdog <koperdog@github.com>
  * @version 1.0
  */
-class CategoryReadRepository {
-    
+class CategoryReadRepository 
+{
     public function get(int $id, $domain_id = null, $language_id = null): ?array
     {   
         return Category::find()->withContent($id, $domain_id, $language_id)->asArray()->one();
@@ -47,6 +47,16 @@ class CategoryReadRepository {
     {
         array_push($exclude, Category::ROOT_ID);
         return Category::find()->withAllContent($domain_id, $language_id, $exclude)->asArray()->all();
+    }
+    
+    public static function getAllSort($domain_id = null, $language_id = null, $exclude = []): ?array
+    {
+        array_push($exclude, Category::ROOT_ID);
+        return Category::find()
+            ->withAllContent($domain_id, $language_id, $exclude)
+            ->asArray()
+            ->orderBy('tree, lft, position')
+            ->all();
     }
     
     public static function getAllAsTree($domain_id = null, $language_id = null): ?array

@@ -20,27 +20,24 @@ abstract class Url extends \yii\base\BaseObject
     
     protected $routeName = "route";
     protected $urlPath   = 'blog/index';
-    
-    protected $repository;
-    
+        
     public $owner;
-    
+        
     public function createUrl($params): string
     {
         if (empty($params['id'])) throw new InvalidParamException('Empty id.');
         $id = $params['id'];
+        
+        if (!$model = static::$repository->get($id)) {
+            return null;
+        }
 
-        $url = \Yii::$app->cache->getOrSet([$this->routeName, 'id' => $id], function() use ($id) {
-            if (!$model = $this->repository->get($id)) {
-                return null;
-            }
-            return $this->getPath($model);
-        });
-
+        $url = $this->getPath($model);
+        
         if (!$url) {
             throw new InvalidParamException('Undefined id.');
         }
-
+                
         $url = $this->owner->prefix . '/' . $url;
 
         unset($params['id']);
@@ -52,7 +49,7 @@ abstract class Url extends \yii\base\BaseObject
     
     public function parseRequest($path)
     {       
-        if (!$model = $this->repository->getByPath($path)) {
+        if (!$model = static::$repository->getByPath($path)) {
             $result = ['id' => null, 'path' => null];
         } else {
             if(!$this->isActive($model) || !$this->checkAccess($model)) return false;

@@ -8,7 +8,8 @@ use startpl\t2cmsblog\models\{
     Category,
     CategoryContent
 };
-//use startpl\t2cmsblog\dto\Category;
+use startpl\t2cmsblog\interfaces\IEventRepository;
+// use startpl\t2cmsblog\dto\Category;
 
 /**
  * Description of CategoryRepository
@@ -16,10 +17,18 @@ use startpl\t2cmsblog\models\{
  * @author Koperdog <koperdog@github.com>
  * @version 1.0
  */
-class CategoryRepository {
-    
+class CategoryRepository extends \yii\base\Component implements IEventRepository
+{   
+    private $eventDispatcher;
     private $searchModel = null;
         
+    public function __construct(\startpl\t2cmsblog\events\EventDispatcher $dispatcher, $config = array()) 
+    {
+        parent::__construct($config);
+                
+        $this->eventDispatcher = $dispatcher;
+    }
+    
     public function getSearchModel(): ?CategorySearch
     {
         return $this->searchModel;
@@ -32,6 +41,11 @@ class CategoryRepository {
         if(!$model){
             throw new \DomainException("Category with id: {$id} was not found");
         }
+        
+        $event = new \startpl\t2cmsblog\events\category\GetEvent([
+            'model' => $model
+        ]);
+        $this->eventDispatcher->trigger(IEventRepository::EVENT_GET, $event);
         
         return $model;
     }
@@ -66,6 +80,11 @@ class CategoryRepository {
         $this->searchModel = new CategorySearch();
         $dataProvider = $this->searchModel->search($params, $domain_id, $language_id);
         
+        $event = new \startpl\t2cmsblog\events\category\SearchEvent([
+            'dataProvider' => $dataProvider
+        ]);
+        $this->eventDispatcher->trigger(IEventRepository::EVENT_SEARCH, $event);
+        
         return $dataProvider;
     }
     
@@ -73,6 +92,13 @@ class CategoryRepository {
     {
         if(!$model->save()){
             throw new \RuntimeException('Error saving model');
+        }
+        
+        if($model instanceof Category) {
+            $event = new \startpl\t2cmsblog\events\category\SaveEvent([
+                'model' => $model
+            ]);
+            $this->eventDispatcher->trigger(IEventRepository::EVENT_SAVE, $event);
         }
         
         return true;
@@ -99,7 +125,12 @@ class CategoryRepository {
         
         if(!$model->appendTo($parent)){
             throw new \RuntimeException("Error append model");
-        }
+        } 
+        
+        $event = new \startpl\t2cmsblog\events\category\SaveEvent([
+            'model' => $model
+        ]);
+        $this->eventDispatcher->trigger(IEventRepository::EVENT_SAVE, $event);
         
         return true;
     }
@@ -172,13 +203,29 @@ class CategoryRepository {
             return false;
         }
         
+        $event = new \startpl\t2cmsblog\events\category\DeleteEvent([
+            'model' => $model
+        ]);
+        $this->eventDispatcher->trigger(IEventRepository::EVENT_DELETE, $event);
+        
         return true;
     }
     
     public static function getAll($domain_id = null, $language_id = null, $exclude = []): ?array
     {
         array_push(ArrayHelper::toArray($exclude), Category::ROOT_ID);
-        return Category::find()->withAllContent($domain_id, $language_id, $exclude)->all();
+        $models = Category::find()->withAllContent($domain_id, $language_id, $exclude)->all();
+        
+        $event = new \startpl\t2cmsblog\events\category\GetAllEvent([
+            'models' => $models
+        ]);
+        try {
+            \yii\base\Event::trigger(static::className(), IEventRepository::EVENT_GET_ALL, $event);
+        } catch (\Exception $e) {
+            // do nothing
+        }
+        
+        return $models;
     }
     
     private function copyCategoryContent(\yii\db\ActiveRecord $model, $domain_id, $language_id)

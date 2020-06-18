@@ -46,6 +46,8 @@ class Page extends \yii\db\ActiveRecord
     
     const STATUS = ['DRAFT' => 1, 'PUBLISHED' => 2, 'ARCHIVE' => 3];
     
+    const NODE_TYPE = 'LEAF';
+    
     public $addCategories;
     public $addPages;
     
@@ -282,6 +284,17 @@ class Page extends \yii\db\ActiveRecord
         return $this->hasOne(\Yii::$app->user->identityClass, ['id' => 'author_id']);
     }
     
+    public function getParents() 
+    {        
+        $parent = Category::findOne($this->category_id);
+        
+        if($parents = $parent->parents()->all()) {
+            return array_merge([$parent], $parents);
+        }
+        
+        return $parent;
+    }
+    
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -298,4 +311,5 @@ class Page extends \yii\db\ActiveRecord
             Category::STATUS['ARCHIVE']   => \Yii::t('nsblog', 'Archive'),
         ];
     }
+    
 }

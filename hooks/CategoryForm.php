@@ -6,11 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace startpl\t2cmsblog\interfaces;
+namespace startpl\t2cmsblog\hooks;
 
 /**
+ * Category form hook
  *
  * @author Koperdog <koperdog.dev@gmail.com>
  */
-interface BlogHelper {
+class CategoryForm extends base\FormHook
+{
+    
 }

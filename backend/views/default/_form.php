@@ -3,13 +3,14 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use yii\helpers\Inflector;
+use startpl\t2cmsblog\hooks\CategoryForm;
 
 /* @var $this yii\web\View */
 /* @var $model startpl\t2cmsblog\models\Category */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->registerJsVar('error_message', \Yii::t('nsblog/error', 'The form contains errors'));
-$this->registerJsVar('ACF_URL', Url::to(['/acf/ajax']));
 ?>
 
 <div class="blog-edit">
@@ -18,7 +19,15 @@ $this->registerJsVar('ACF_URL', Url::to(['/acf/ajax']));
         <div class="btn-group" role="group" id="section_tabs">
             <button type="button" class="btn btn-default active" data-section="main"><?=\Yii::t('nsblog', 'Category')?></button>
             <button type="button" class="btn btn-default" data-section="seo"><?=\Yii::t('nsblog', 'SEO')?></button>
-            <button type="button" class="btn btn-default" data-section="acf"><?=\Yii::t('nsblog', 'Custom Fields')?></button>
+            <?php foreach(CategoryForm::getSections() as $title => $section): ?>
+                <button 
+                    type="button" 
+                    class="btn btn-default" 
+                    data-section="<?=Inflector::slug($title)?>"
+                >
+                <?=\Yii::t('t2cms', $title)?>
+                </button>
+            <?php endforeach;?>
         </div>
         
         <div class="zone-section">
@@ -56,22 +65,15 @@ $this->registerJsVar('ACF_URL', Url::to(['/acf/ajax']));
         ]) ?>
     </div>
     
-    
-    <?php //debug($model);?>
-    <?php // ajax will load acf form ?>
-    <?= Html::tag('div', null,[
-        'id' => 'acf',
-        'class' => 'section',
-        'data' => [
-            'acf' => [
-                'group_id'    => $model->settings['acf_group_id'],
-                'src_type'    => \startpl\t2cmsblog\models\Category::TYPE,
-                'src_id'      => $model->id,
-                'domain_id'   => \t2cms\sitemanager\components\Domains::getEditorDomainId(),
-                'language_id' => \t2cms\sitemanager\components\Languages::getEditorLangaugeId(),
-            ]
-        ]
-    ])?>
+    <?php foreach(CategoryForm::getSections() as $title => $section): ?>
+        <div 
+            id="<?=Inflector::slug($title)?>"
+            class="section" 
+        >
+        <?=$section?>
+        </div>
+    <?php endforeach;?>
+
     
     <div class="form-group">
         <?= Html::submitButton(Yii::t('nsblog', 'Save'), ['class' => 'btn btn-success', 'id' => 'btn-save-post']) ?>
@@ -81,24 +83,3 @@ $this->registerJsVar('ACF_URL', Url::to(['/acf/ajax']));
     <?=Html::hiddenInput('close-identity', false, ['id' => 'close-identity'])?>
     <?php ActiveForm::end(); ?>
 </div>
-
-<?php
-
-$js = <<<JS
-    loadAcf();
-    function loadAcf(){
-    const acf  = $('#acf');
-
-    $.ajax({
-        url: ACF_URL,
-        type: "POST",
-        data: acf.data(),
-        success: function(response){
-            acf.html(response);
-        }
-    })
-}
-JS;
-
-$this->registerJs($js);
-?>

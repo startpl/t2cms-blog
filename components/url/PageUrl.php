@@ -25,11 +25,13 @@ class PageUrl extends Url {
     
     protected $urlPath   = 'blog/pages/view';
     
+    public static $repository;
+    
     public function __construct(PageRepository $repository, $config = [])
     {
         parent::__construct($config);
         
-        $this->repository = $repository;
+        self::$repository = $repository;
     }
     
     protected function getPath($page): string

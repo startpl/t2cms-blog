@@ -24,11 +24,12 @@ class CategoryUrl extends Url {
     
     protected $urlPath   = 'blog/categories/view';
     
+    public static $repository;
+    
     public function __construct(CategoryRepository $repository, $config = [])
     {
         parent::__construct($config);
-        
-        $this->repository = $repository;
+        self::$repository = $repository;
     }
     
     protected function getPath($category): string

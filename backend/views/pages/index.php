@@ -67,13 +67,15 @@ $this->registerJsVar('i18n', [
     
     <div class="row">
         
+        <!--<div class="col-md-12"><?php debug(\startpl\t2cmsblog\services\nestedSets\MenuArray::getData());?></div>-->
+        
         <div class="col-md-2 categories_gridlist">
             <?= \startpl\yii2NestedSetsMenu\Menu::widget([
                 'items' => \startpl\t2cmsblog\services\nestedSets\MenuArray::getData(),
                 'options' => ['id'=>'blog-categories-list2', 'class' => 'categories-menu2'],
-                'encodeLabels'=>false,
-                'activateParents'=>true,
-                'activeCssClass'=>'active',
+                'encodeLabels' => false,
+                'activateParents' => true,
+                'activeCssClass' => 'active',
             ]);?>
         </div>
         <div class="col-md-10">
