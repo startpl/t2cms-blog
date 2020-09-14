@@ -14,11 +14,25 @@ use yii\filters\VerbFilter;
  */
 class PagesController extends Controller
 {
-    public function __construct($id, $module, $config = array()) {
+    private $categoryRepository;
+    
+    public function __construct(
+        $id, 
+        $module, 
+        \startpl\t2cmsblog\repositories\CategoryRepository $categoryRepository,
+        $config = array()
+    ) {
         parent::__construct($id, $module, $config);
         
         $this->viewPath = '@themePath/blog/pages';
+        $this->categoryRepository = $categoryRepository;
     }
+    
+    public function actionIndex() 
+    {
+        return 'da';
+    }
+    
     /**
      * Displays a single Page model.
      * @param integer $id
@@ -42,6 +56,8 @@ class PagesController extends Controller
     protected function findModel($id)
     {
         if (($model = Page::findOne($id)) !== null) {
+            $parents = $this->categoryRepository->getParents($model->category);
+            $model->parents = array_merge($parents, [$model->category]);
             return $model;
         }
 

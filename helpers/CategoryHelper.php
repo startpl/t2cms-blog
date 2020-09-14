@@ -23,8 +23,7 @@ use startpl\t2cmsblog\models\Category;
  */
 class CategoryHelper implements BlogHelper
 {
-    
-    public static function get(int $id, $domain_id = null, $language_id = null): ?Category
+    public static function get(int $id, $domain_id = null, $language_id = null): ?array
     {
         $domain_id   = self::getCurrentDomain($domain_id);
         $language_id = self::getCurrentLanguage($language_id);

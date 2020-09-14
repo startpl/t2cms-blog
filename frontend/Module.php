@@ -18,6 +18,10 @@ class Module extends \yii\base\Module
     {
         parent::init();
         
+        \Yii::$app->urlManager->addRules([
+            'pages' => 'blog/pages/index'
+        ]);
+        
         $this->registerTranslations();
     }
     

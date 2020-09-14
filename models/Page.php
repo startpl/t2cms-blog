@@ -54,6 +54,8 @@ class Page extends \yii\db\ActiveRecord
     public $rltCategories;
     public $rltPages;
     
+    public $parents;
+    
     /**
      * {@inheritdoc}
      */
@@ -287,8 +289,8 @@ class Page extends \yii\db\ActiveRecord
     public function getParents() 
     {        
         $parent = Category::findOne($this->category_id);
-        
-        if($parents = $parent->parents()->all()) {
+                                
+        if($parents = $parent->getParents()) {
             return array_merge([$parent], $parents);
         }
         

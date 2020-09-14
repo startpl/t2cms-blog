@@ -34,6 +34,11 @@ class CategoriesController extends Controller
         $this->viewPath = '@themePath/blog/categories';
     }
     
+    public function actionIndex() 
+    {
+        return 'categories';
+    }
+    
     public function actionView($id)
     {
         $model   = $this->findModel($id);
@@ -43,7 +48,7 @@ class CategoriesController extends Controller
     
     private function findModel(int $id): Category
     {
-        try{
+        try {
             $model          = $this->categoryRepository->get($id);
             $model->parents = $this->categoryRepository->getParents($model);
         } catch (\DomainException $e){

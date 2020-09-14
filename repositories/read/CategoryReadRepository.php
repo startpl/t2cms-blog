@@ -15,7 +15,7 @@ use startpl\t2cmsblog\models\{
  */
 class CategoryReadRepository 
 {
-    public function get(int $id, $domain_id = null, $language_id = null): ?array
+    public static function get(int $id, $domain_id = null, $language_id = null): ?array
     {   
         return Category::find()->withContent($id, $domain_id, $language_id)->asArray()->one();
     }

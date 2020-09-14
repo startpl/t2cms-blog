@@ -63,10 +63,12 @@ class PageRepository extends \yii\base\Component implements IEventRepository
             throw new \RuntimeException('Error saving model');
         }
         
-        $event = new \startpl\t2cmsblog\events\page\SaveEvent([
-            'model' => $model
-        ]);
-        $this->trigger(IEventRepository::EVENT_SAVE, $event);
+        if($model instanceof Page) {
+            $event = new \startpl\t2cmsblog\events\page\SaveEvent([
+                'model' => $model
+            ]);
+            $this->trigger(IEventRepository::EVENT_SAVE, $event);
+        }
         
         return true;
     }
