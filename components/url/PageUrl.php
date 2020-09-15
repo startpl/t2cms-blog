@@ -44,7 +44,7 @@ class PageUrl extends Url {
             $sections = ArrayHelper::getColumn($category->parents()->andWhere(['>=', 'depth', Category::OFFSET_ROOT])->all(), 'url');
             $sections[] = $category->url;
             $sections[] = $page->url;
-            return implode('/', $sections);
+            return implode('/', array_filter($sections));
         }
         
         return false;

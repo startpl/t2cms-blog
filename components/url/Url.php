@@ -31,7 +31,7 @@ abstract class Url extends \yii\base\BaseObject
         if (!$model = static::$repository->get($id)) {
             return null;
         }
-
+        
         $url = $this->getPath($model);
         
         if (!$url) {

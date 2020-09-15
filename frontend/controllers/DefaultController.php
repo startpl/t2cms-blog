@@ -71,10 +71,11 @@ class DefaultController extends Controller
         return Category::find()
             ->where(['NOT IN', 'id', $exclude])
             ->andWhere([
+                'depth' => 1,
                 'status' => Category::STATUS['PUBLISHED'],
                 'access_read' => ['user', 'everyone']]
             )
-            ->orderBy('created_at DESC')
+            ->orderBy('lft')
             ->withAllContent($domain_id, $language_id, $exclude);
     }
     

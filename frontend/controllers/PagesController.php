@@ -3,7 +3,10 @@
 namespace startpl\t2cmsblog\frontend\controllers;
 
 use Yii;
-use startpl\t2cmsblog\models\Page;
+use startpl\t2cmsblog\models\{
+    Page,
+    Category
+};
 use startpl\t2cmsblog\models\PageSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -56,8 +59,13 @@ class PagesController extends Controller
     protected function findModel($id)
     {
         if (($model = Page::findOne($id)) !== null) {
-            $parents = $this->categoryRepository->getParents($model->category);
-            $model->parents = array_merge($parents, [$model->category]);
+            if($model->category->id !== Category::ROOT_ID){
+                $parents = $this->categoryRepository->getParents($model->category);
+                $model->parents = array_merge($parents, [$model->category]);
+            } else {
+                $model->parents = [];
+            }
+            
             return $model;
         }
 

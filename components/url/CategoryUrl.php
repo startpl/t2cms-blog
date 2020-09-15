@@ -36,7 +36,7 @@ class CategoryUrl extends Url {
     {
         $sections = ArrayHelper::getColumn($category->parents()->andWhere(['>=', 'depth', Category::OFFSET_ROOT])->all(), 'url');
         $sections[] = $category->url;
-        return implode('/', $sections);
+        return implode('/', array_filter($sections));
     }
     
     protected function isActive(Category $model): bool

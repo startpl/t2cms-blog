@@ -14,7 +14,7 @@ class CategoryUrlRule extends BaseObject implements UrlRuleInterface
     public function createUrl($manager, $route, $params)
     {
         if ($route === 'blog/category') {
-            return self::getManager()->createUrl($params);
+            return $this->getManager()->createUrl($params);
         }
         
         return false;
